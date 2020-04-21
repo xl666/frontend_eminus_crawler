@@ -1,0 +1,5 @@
+cryptography
+bs4
+selenium
+aiofiles
+aiohttp
