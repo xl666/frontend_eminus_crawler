@@ -45,7 +45,7 @@ def ir_a_cursos_vigentes(driver):
         except Exception as err:
             raise excepciones.CursosException('No se pudo regresar a los cursos vigentes')
     else:
-        ciclar_cursos_hasta_vigentes()
+        ciclar_cursos_hasta_vigentes(driver)
 
 def ir_a_cursos_terminados(driver):
     if not driver.current_url == URL_MAIN:
