@@ -6,13 +6,14 @@
 
 {% block contenido %}
 
+
 {% if errores %}
 <div class="alert alert-danger">
   <strong>ERROR</strong> {{ errores }}  
 </div>
 {% endif %}
   
-<form method="POST" action="/login/">
+<form method="POST" action="/inicio/">
   {% csrf_token %}
   <div class="row">
     <div class="col-sm-5">Usuario MiUV:</div>

@@ -1,6 +1,10 @@
 from bd import models
 import datetime
 import front_end.settings as settings
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+import os
+import base64
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -37,3 +41,31 @@ def dejar_pasar_peticion_login(request):
         return False
         
 
+def cifrar(mensaje, llave_aes, iv):
+    aesCipher = Cipher(algorithms.AES(llave_aes), modes.CTR(iv),
+                       backend=default_backend())
+    cifrador = aesCipher.encryptor()    
+    cifrado = cifrador.update(mensaje)
+    cifrador.finalize()
+    return cifrado
+
+def descifrar(cifrado, llave_aes, iv):
+    aesCipher = Cipher(algorithms.AES(llave_aes), modes.CTR(iv),
+                       backend=default_backend())
+    descifrador = aesCipher.decryptor()
+    plano = descifrador.update(cifrado)
+    descifrador.finalize()
+    return plano
+
+def generar_llave():
+    llave_aes = os.urandom(16)
+    iv = os.urandom(16)
+    return llave_aes, iv
+
+def cifrar_credenciales(usuario, password, llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd):
+    usuario_cifrado = cifrar(usuario.encode('utf-8'), llave_aes_usr, iv_usr)
+    password_cifrado = cifrar(password.encode('utf-8'), llave_aes_pwd, iv_pwd)
+    return usuario_cifrado, password_cifrado
+
+def convertir_dato_base64(dato):
+    return base64.b64encode(dato).decode('utf-8')
