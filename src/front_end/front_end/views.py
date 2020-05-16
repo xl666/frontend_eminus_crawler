@@ -24,13 +24,9 @@ def inicio(request):
 
             if usuario == USUARIO_PRUEBA and contra == CONTRA_PRUEBA:
                 request.session['logueado'] = True
-                llave_aes_usr, iv_usr = back_end.generar_llave()
-                llave_aes_pwd, iv_pwd = back_end.generar_llave()
-                usuario_cifrado, password_cifrado = back_end.cifrar_credenciales(usuario, contra, llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd)
-                request.session['usuario'] = back_end.convertir_dato_base64(usuario_cifrado)
-                request.session['password'] = back_end.convertir_dato_base64(password_cifrado)
+                llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd = back_end.wrap_llaves(request, usuario, contra)
                 
-                return render(request, 'lista_cursos.html', {'llave_aes_usr': back_end.convertir_dato_base64(llave_aes_usr), 'iv_usr': back_end.convertir_dato_base64(iv_usr), 'llave_aes_pwd': back_end.convertir_dato_base64(llave_aes_pwd), 'iv_pwd': back_end.convertir_dato_base64(iv_pwd)})
+                return render(request, 'lista_cursos.html', {'llave_aes_usr': llave_aes_usr, 'iv_usr': iv_usr, 'llave_aes_pwd': llave_aes_pwd, 'iv_pwd': iv_pwd})
             else:
                 return render(request, t, {'errores': 'Usuario o contraseña incorrectos'})
 
