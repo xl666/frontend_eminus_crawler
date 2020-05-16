@@ -19,7 +19,7 @@ from front_end.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('inicio/', inicio),
-    path('listarCursos/', listar_cursos),
+    path('login/', login),
+    path('listar_cursos/', listar_cursos),
     path('logout/', logout),
 ]

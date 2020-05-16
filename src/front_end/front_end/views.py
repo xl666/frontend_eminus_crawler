@@ -9,7 +9,7 @@ from front_end.decoradores import *
 USUARIO_PRUEBA = 'dummy'
 CONTRA_PRUEBA = 'dummy'
 
-def inicio(request):
+def login(request):
     t = 'login.html'
     if request.method == 'GET' and not request.session.get('logueado', False):
         return render(request, t)
@@ -25,8 +25,13 @@ def inicio(request):
             if usuario == USUARIO_PRUEBA and contra == CONTRA_PRUEBA:
                 request.session['logueado'] = True
                 llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd = back_end.wrap_llaves(request, usuario, contra)
-                
-                return render(request, 'lista_cursos.html', {'llave_aes_usr': llave_aes_usr, 'iv_usr': iv_usr, 'llave_aes_pwd': llave_aes_pwd, 'iv_pwd': iv_pwd})
+
+                respuesta = redirect('/listar_cursos')
+                respuesta.set_cookie('key1', llave_aes_usr)
+                respuesta.set_cookie('key2', iv_usr)
+                respuesta.set_cookie('key3', llave_aes_pwd)
+                respuesta.set_cookie('key4', iv_pwd) 
+                return respuesta
             else:
                 return render(request, t, {'errores': 'Usuario o contraseña incorrectos'})
 
@@ -42,4 +47,9 @@ def listar_cursos(request):
 @esta_logueado
 def logout(request):
     request.session.flush()
-    return redirect('/inicio')
+    respuesta = redirect('/login')
+    respuesta.delete_cookie('key1')
+    respuesta.delete_cookie('key2')
+    respuesta.delete_cookie('key3')
+    respuesta.delete_cookie('key4')
+    return respuesta
