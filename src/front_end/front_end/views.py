@@ -27,10 +27,10 @@ def login(request):
                 llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd = back_end.wrap_llaves(request, usuario, contra)
 
                 respuesta = redirect('/listar_cursos')
-                respuesta.set_cookie('key1', llave_aes_usr)
-                respuesta.set_cookie('key2', iv_usr)
-                respuesta.set_cookie('key3', llave_aes_pwd)
-                respuesta.set_cookie('key4', iv_pwd) 
+                respuesta.set_cookie('key1', llave_aes_usr, httponly=True, samesite='Strict')
+                respuesta.set_cookie('key2', iv_usr, httponly=True, samesite='Strict')
+                respuesta.set_cookie('key3', llave_aes_pwd, httponly=True, samesite='Strict')
+                respuesta.set_cookie('key4', iv_pwd, httponly=True, samesite='Strict') 
                 return respuesta
             else:
                 return render(request, t, {'errores': 'Usuario o contraseña incorrectos'})
