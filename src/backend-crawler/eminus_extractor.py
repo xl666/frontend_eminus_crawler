@@ -81,7 +81,7 @@ def crear_credenciales():
 @decoradores.manejar_errores_credenciales
 def listar_cursos(terminados=False):
     driver = config.configure()
-    usuario, password = credenciales.recuperar_credenciales()
+    usuario, password = credenciales.recuperar_credenciales_env()
     login.login(driver, usuario, password)
     if terminados:
         cr.ir_a_cursos_terminados(driver)
@@ -107,7 +107,7 @@ def run_process(terminados, idCurso, directorio, usuario, password, color=salida
 @decoradores.manejar_errores_credenciales
 def extraer_evidencias(terminados, evidencias, directorio, procesos=1):
     tiempo1 = time.time()
-    usuario, password = credenciales.recuperar_credenciales()
+    usuario, password = credenciales.recuperar_credenciales_env()
     despachador = recolectorArchivos.Despachador(usuario, password)
     despachador.start()
     with multiprocessing.Pool(procesos) as pool:
