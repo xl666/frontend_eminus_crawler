@@ -96,18 +96,18 @@ def ver_cursos(cursos):
         nombre = get_nombre_curso(curso)
         fecha = get_fecha_curso(curso)
 
-        nombre = 'id:%s %s' % (identificador, nombre)
+        nombre = '{"periodo": "%s", "id_eminus": "%s", "nombre": "%s"}' % (fecha, identificador, nombre)        
         
         if not fecha in fecha_cursos.keys():
             fecha_cursos[fecha] = [nombre]
         else:
             fecha_cursos[fecha].append(nombre)
-            
+
+    salida = '['
     for fe in ordenar_cursos_fecha(fecha_cursos):
-        salida += '\n%s:\n' % fe
         for curso in fecha_cursos[fe]:
-            salida += '     %s\n' % curso 
-    return salida
+            salida += curso + ","
+    return salida[:-1] + "]"
 
 def esta_seleccionado_curso(curso):
     return not 'white' in curso.get_attribute("style")
