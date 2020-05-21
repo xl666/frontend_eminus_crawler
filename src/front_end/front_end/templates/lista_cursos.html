@@ -5,8 +5,12 @@
 {% block encabezado %}Lista de cursos{% endblock %}
 
 {% block contenido %}
-DUMMY!!
 
+<ul>
+{% for curso in cursos %}
+<li>{{ curso.nombre }}</li>
+{% endfor %}
+</ul>
 
 {% endblock %}
 

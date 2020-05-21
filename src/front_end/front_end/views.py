@@ -6,6 +6,7 @@ import front_end.back_end as back_end
 from front_end.decoradores import *
 
 
+
 USUARIO_PRUEBA = 'dummy'
 CONTRA_PRUEBA = 'dummy'
 
@@ -42,7 +43,16 @@ def login(request):
 def listar_cursos(request):
     t = 'lista_cursos.html'
     if request.method == 'GET':
-            return render(request, t)    
+        try:
+            token = back_end.regresar_token_sesion()
+        except TokenException as err:
+            return redirect('/login/')
+        try:
+            cursos = back_end.regresar_cursos(request, token)
+        except CursosException as err:
+            return redirect('/login/')
+        
+        return render(request, t, {'cursos': cursos})    
 
 @esta_logueado
 def logout(request):

@@ -5,6 +5,10 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import os
 import base64
+from front_end import settings
+import requests
+from front_end import excepciones
+import json
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -98,3 +102,23 @@ def unwrap_llaves(request, llave_aes_usr_b64, iv_usr_b64, llave_aes_pwd_b64, iv_
     usuario = descifrar(usuario_cif, llave_aes_usr, iv_usr)
     pwd = descifrar(usuario_cif, llave_aes_pwd, iv_pwd)
     return usuario, pwd
+
+def regresar_token_sesion():
+    url_token = settings.URL_SERVICIOS + '/autenticacion/'
+    data = {'username': settings.CLIENTE_SERVICIOS_USR, 'password': settings.CLIENTE_SERVICIOS_PWD}
+    respuesta = requests.post(url_token, data=data)
+    if respuesta.status_code != 200:
+        raise TokenException('No se pudo recuperar el token: %s' % respuesta.status_code)
+    else:
+        diccionario = json.loads(respuesta.text)
+        return diccionario['token']
+
+def regresar_cursos(request, token):
+    url_cursos = settings.URL_SERVICIOS + '/cursos/'
+    headers = {'Authorization': 'Token %s' % token}
+    respuesta = requests.get(url_cursos, headers=headers)
+    if respuesta.status_code != 200:
+        raise CursosException('Hubo un error al querer recuperar los cursos: %s' % respuesta.status_code)
+    else:
+        cursos = json.loads(respuesta.text)
+        return cursos
