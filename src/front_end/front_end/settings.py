@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 VENTANA_TIEMPO_INTENTOS_LOGIN = 60
-INTENTOS_LOGIN = 5
+INTENTOS_LOGIN = 50
 
 URL_SERVICIOS = os.environ.get('URL_SERVICIOS', '')
 CLIENTE_SERVICIOS_USR=os.environ.get('CLIENTE_SERVICIOS_USR', '')

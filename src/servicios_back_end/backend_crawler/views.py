@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.throttling import UserRateThrottle
 import json
+from backend_crawler import back_end
+
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -12,6 +14,14 @@ import json
 @throttle_classes([UserRateThrottle])
 def curso_list(request):
     if request.method == 'GET':
-        datos_raw = '[{"periodo": "01/Feb/2020 - 31/Jul/2020", "id_eminus": "110099", "nombre": "EXPERIENCIA RECEPCIONAL (84198)"},{"periodo": "01/Feb/2020 - 31/Jul/2020", "id_eminus": "110100", "nombre": "PRUEBAS DE PENETRACION (84401)"},{"periodo": "01/Feb/2020 - 31/Jul/2020", "id_eminus": "110101", "nombre": "PROGRAMACION SEGURA (87361)"},{"periodo": "01/Feb/2020 - 31/Jul/2020", "id_eminus": "110102", "nombre": "CRIPTOGRAFIA (89705)"}]'
-        datos = json.loads(datos_raw) 
+        usuario = request.headers.get('usuario-eminus', '')
+        password = request.headers.get('password-eminus', '')
+        if not usuario or not password:
+            return Response({'Error': 'No se tiene usuario y password'})
+        terminados = False
+        if request.META.get('terminados', None):
+            terminados = True
+        datos = back_end.regresar_cursos(usuario, password, terminados)
+        if not datos:
+            return Response({'Error': 'No se pudieron recuperar los datos'})
         return Response(datos)

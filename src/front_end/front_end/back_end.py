@@ -88,11 +88,15 @@ def wrap_llaves(request, usuario, contra):
             convertir_dato_base64(llave_aes_pwd),
             convertir_dato_base64(iv_pwd))
 
-def unwrap_llaves(request, llave_aes_usr_b64, iv_usr_b64, llave_aes_pwd_b64, iv_pwd_b64):
-    usuario_cif_b64 = request.session.get('usuario', '')
-    pwd_cif_b64 = request.session.get('password', '')
-    if not usuario_cif or not pwd_cif:
+def unwrap_llaves(request):
+    llave_aes_usr_b64 = request.COOKIES.get('key1', '')
+    iv_usr_b64 = request.COOKIES.get('key2', '')
+    llave_aes_pwd_b64 = request.COOKIES.get('key3', '')
+    iv_pwd_b64 = request.COOKIES.get('key4', '')
+    if not llave_aes_usr_b64 or not iv_usr_b64 or not llave_aes_pwd_b64 or not iv_pwd_b64:
         return None
+    usuario_cif_b64 = request.session.get('usuario', '')
+    pwd_cif_b64 = request.session.get('password', '')    
     usuario_cif = convertir_base64_dato(usuario_cif_b64)
     pwd_cif = convertir_base64_dato(pwd_cif_b64)
     llave_aes_usr = convertir_base64_dato(llave_aes_usr_b64)
@@ -100,7 +104,7 @@ def unwrap_llaves(request, llave_aes_usr_b64, iv_usr_b64, llave_aes_pwd_b64, iv_
     iv_usr = convertir_base64_dato(iv_usr_b64)
     iv_pwd = convertir_base64_dato(iv_pwd_b64)
     usuario = descifrar(usuario_cif, llave_aes_usr, iv_usr)
-    pwd = descifrar(usuario_cif, llave_aes_pwd, iv_pwd)
+    pwd = descifrar(pwd_cif, llave_aes_pwd, iv_pwd)
     return usuario, pwd
 
 def regresar_token_sesion():
@@ -115,10 +119,13 @@ def regresar_token_sesion():
 
 def regresar_cursos(request, token):
     url_cursos = settings.URL_SERVICIOS + '/cursos/'
-    headers = {'Authorization': 'Token %s' % token}
+    usuario, password = unwrap_llaves(request)
+    headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8'), 'password-eminus': password.decode('utf-8')}
     respuesta = requests.get(url_cursos, headers=headers)
     if respuesta.status_code != 200:
-        raise CursosException('Hubo un error al querer recuperar los cursos: %s' % respuesta.status_code)
+        raise excepciones.CursosException('Hubo un error al querer recuperar los cursos: %s' % respuesta.status_code)
     else:
         cursos = json.loads(respuesta.text)
+        if type(cursos) == type({}) and "Error" in cursos.keys():
+            raise excepciones.CursosException('Hubo un error al querer recuperar los cursos: %s' % cursos.get('Error'))        
         return cursos
