@@ -7,11 +7,9 @@ def manejar_errores_credenciales(fun):
         try:
             fun(*args, **kwargs)
         except excepciones.CredencialesException as e:
-            print(e)
-            print('Asegurate de haber creado correctamente las credenciales mediante la opción -c o --credenciales')
+            print('{"Error": "%s"}' % e.__str__())
             exit(1)
         except Exception as e:
-            print(e)
-            print('Asegurate de tener conexión a internet y de que las credenciales creadas fueron correctas')
+            print('{"Error": "%s"}' % e.__str__())
             exit(1)
     return interna
