@@ -19,7 +19,7 @@ def curso_list(request):
         if not usuario or not password:
             return Response({'Error': 'No se tiene usuario y password'})
         terminados = False
-        if request.META.get('terminados', None):
+        if request.headers.get('terminados', None):
             terminados = True
         datos = back_end.regresar_cursos(usuario, password, terminados)
         if not datos:

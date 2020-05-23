@@ -117,10 +117,12 @@ def regresar_token_sesion():
         diccionario = json.loads(respuesta.text)
         return diccionario['token']
 
-def regresar_cursos(request, token):
+def regresar_cursos(request, token, terminados=False):
     url_cursos = settings.URL_SERVICIOS + '/cursos/'
     usuario, password = unwrap_llaves(request)
     headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8'), 'password-eminus': password.decode('utf-8')}
+    if terminados:
+        headers['terminados'] = "true"
     respuesta = requests.get(url_cursos, headers=headers)
     if respuesta.status_code != 200:
         raise excepciones.CursosException('Hubo un error al querer recuperar los cursos: %s' % respuesta.status_code)

@@ -3,14 +3,47 @@
 {% block titulo %}Cursos{% endblock %}
 
 {% block encabezado %}Lista de cursos{% endblock %}
+{% block estilos %}
+<link rel="stylesheet" href="/static/css/estilo.css">
+{% endblock %}
 
 {% block contenido %}
 
-<ul>
-{% for curso in cursos %}
-<li>{{ curso.nombre }}</li>
-{% endfor %}
-</ul>
+<div class="alert alert-warning">
+  <strong>Nota:</strong> no es posible combinar cursos actuales y terminados en la misma extracción
+</div>
+
+<br />
+<a class="btn btn-info" role="button" href="/listar_cursos">Cursos Actuales</a>
+<a class="btn btn-info" role="button" href="/listar_cursos?terminados=true">Cursos Terminados</a>
+
+<br />
+<table class="table" id="tabla_cursos">
+    <thead>
+      <tr>
+        <th class="hide">eminus_id</th>
+	<th>Seleccionar</th>
+        <th>Periodo</th>
+        <th>Nombre</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for curso in cursos %}
+    <tr>
+      <td class="hide">{{ curso.id_eminus }}</td>
+      <th>
+	<div class="checkbox">
+	  <label><input type="checkbox" value=""></label>
+	</div>
+      </th>
+      <td>{{ curso.periodo }}</td>
+      <td>{{ curso.nombre }}</td>
+    </tr>
+    {% endfor %}
+
+
+    </tbody>
+  </table>
 
 {% endblock %}
 

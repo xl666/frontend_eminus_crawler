@@ -41,14 +41,34 @@ def listar_cursos(request):
             token = back_end.regresar_token_sesion()
         except excepciones.TokenException as err:
             request.session['logueado'] = False
-            return redirect('/login/')
+            return redirect('/logout/')
+        cache = None
         try:
-            cursos = back_end.regresar_cursos(request, token)
+            terminados = request.GET.get('terminados', False)
+            if terminados:
+                cache = request.session.get('cache_cursos_terminados', None)
+                terminados = True
+            else:
+                cache = request.session.get('cache_cursos_actuales', None)
+            if not cache:
+                cursos = back_end.regresar_cursos(request, token, terminados)
+            else:
+                cursos = cache
         except excepciones.CursosException as err:
             request.session['errores'] = err.__str__()
             request.session['logueado'] = False
-            return redirect('/login/')
+            return redirect('/logout/')
 
+        if terminados:
+            cache = request.session.get('cache_cursos_terminados', None)
+            if not cache:
+                request.session['cache_cursos_terminados'] = cursos
+        else:
+            cache = request.session.get('cache_cursos_actuales', None)
+            if not cache:
+                request.session['cache_cursos_actuales'] = cursos
+
+        
         return render(request, t, {'cursos': cursos})    
 
 @esta_logueado
