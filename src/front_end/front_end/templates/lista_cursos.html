@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="/static/css/estilo.css">
 {% endblock %}
 
+{% block scripts %}
+<script src="/static/js/cursos.js"></script>
+{% endblock %}
+
 {% block contenido %}
 
 <div class="alert alert-warning">
@@ -18,7 +22,8 @@
 <a class="btn btn-info" role="button" href="/listar_cursos?terminados=true">Cursos Terminados</a>
 
 <br />
-<table class="table" id="tabla_cursos">
+<br />
+<table class="table">
     <thead>
       <tr>
         <th class="hide">eminus_id</th>
@@ -27,15 +32,15 @@
         <th>Nombre</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tabla_cursos">
     {% for curso in cursos %}
     <tr>
       <td class="hide">{{ curso.id_eminus }}</td>
-      <th>
+      <td>
 	<div class="checkbox">
 	  <label><input type="checkbox" value=""></label>
 	</div>
-      </th>
+      </td>
       <td>{{ curso.periodo }}</td>
       <td>{{ curso.nombre }}</td>
     </tr>
@@ -45,6 +50,18 @@
     </tbody>
   </table>
 
+<div class="row">
+  <div class="col-sm-5">
+  </div>
+  <div class="col-sm-5">
+  </div>
+
+  <form class="col-sm-2" method="POST" action="/listar_cursos/" id="formulario">
+    {% csrf_token %}
+    <input type="hidden" name="ids" id="ids" value=""/>
+    <button type="submit"  class="btn btn-primary" id="botonExtraccion">Extraer evidencias</button> 
+  </form>
+</div>
 {% endblock %}
 
 

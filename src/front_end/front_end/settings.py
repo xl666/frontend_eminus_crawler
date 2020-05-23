@@ -16,11 +16,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 VENTANA_TIEMPO_INTENTOS_LOGIN = 60
-INTENTOS_LOGIN = 50
+INTENTOS_LOGIN = 5
 
 URL_SERVICIOS = os.environ.get('URL_SERVICIOS', '')
-CLIENTE_SERVICIOS_USR=os.environ.get('CLIENTE_SERVICIOS_USR', '')
-CLIENTE_SERVICIOS_PWD=os.environ.get('CLIENTE_SERVICIOS_PWD', '')
+CLIENTE_SERVICIOS_USR = os.environ.get('CLIENTE_SERVICIOS_USR', '')
+CLIENTE_SERVICIOS_PWD = os.environ.get('CLIENTE_SERVICIOS_PWD', '')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

@@ -67,9 +67,12 @@ def listar_cursos(request):
             cache = request.session.get('cache_cursos_actuales', None)
             if not cache:
                 request.session['cache_cursos_actuales'] = cursos
-
         
-        return render(request, t, {'cursos': cursos})    
+        return render(request, t, {'cursos': cursos})
+
+    elif request.method == 'POST':
+        ids = request.POST.get('ids', '')
+        print(ids)
 
 @esta_logueado
 def logout(request):
