@@ -17,6 +17,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PATH_BACK_END = f'{BASE_DIR}/../backend-crawler'
 
+MEDIA_DIR = f'{BASE_DIR}/media'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 

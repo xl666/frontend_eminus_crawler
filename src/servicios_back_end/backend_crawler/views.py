@@ -6,7 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.throttling import UserRateThrottle
 import json
 from backend_crawler import back_end
-
+from servicios_back_end import settings
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -25,3 +25,21 @@ def curso_list(request):
         if not datos:
             return Response({'Error': 'No se pudieron recuperar los datos'})
         return Response(datos)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
+def extraer_evidencias(request):
+    if request.method == 'GET':
+        usuario = request.headers.get('usuario-eminus', '')
+        password = request.headers.get('password-eminus', '')
+        ids = request.headers.get('ids', '')
+        if not usuario or not password:
+            return Response({'Error': 'No se tiene usuario y password'})
+        terminados = False
+        if request.headers.get('terminados', None):
+            terminados = True
+    back_end.calendarizar_trabajo_extraccion(usuario, password, ids, settings.MEDIA_DIR, terminados)
+    return Response({'Status': 'OK'})
