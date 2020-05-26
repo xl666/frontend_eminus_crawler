@@ -14,7 +14,8 @@ def crear_ruta(ruta_base, sub_dir):
     except FileExistsError:
         if not os.path.isdir(ruta):
             raise excepciones.RutaException('No se puede crear directorio para guardar archivos de alumno, la ruta ya existe y no es directorio:%s' % ruta)
-        raise excepciones.RutaException('No se puede crear directorio %s, ya existe' % ruta)
+        #raise excepciones.RutaException('No se puede crear directorio %s, ya existe' % ruta)
+        return ruta
     except Exception:
         raise excepciones.RutaException('No se puede crear directorio para guardar archivos de alumno')
 

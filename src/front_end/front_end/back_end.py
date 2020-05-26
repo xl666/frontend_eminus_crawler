@@ -131,3 +131,27 @@ def regresar_cursos(request, token, terminados=False):
         if type(cursos) == type({}) and "Error" in cursos.keys():
             raise excepciones.CursosException('Hubo un error al querer recuperar los cursos: %s' % cursos.get('Error'))        
         return cursos
+
+def iniciar_extraccion(request, token):
+    ids = request.POST.get('ids', '')
+    terminados = request.POST.get('terminados', False)
+    if terminados:
+        terminados = True
+    if not ids:
+        raise excepciones.ExtraccionException('No hay cursos seleccionados')
+    
+    url_extraccion = settings.URL_SERVICIOS + '/extraer_evidencias/'
+    usuario, password = unwrap_llaves(request)
+    headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8'), 'password-eminus': password.decode('utf-8'), "ids": ids}
+    if terminados:
+        headers['terminados'] = "true"
+    respuesta = requests.get(url_extraccion, headers=headers)
+    if respuesta.status_code != 200:
+        raise excepciones.ExtraccionException('Hubo un error al intentar iniciar la extracción: %s' % respuesta.status_code)
+    else:
+        respuesta = json.loads(respuesta.text)
+        if respuesta.get('Status', '') == 'OK':
+            return respuesta.get('Job_id', 'nada')
+        if respuesta.get('Error', ''):
+            raise excepciones.ExtraccionException('Hubo un error al intentar iniciar la extracción: %s' % respuesta.get('Error'))
+        return False

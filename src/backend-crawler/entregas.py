@@ -63,7 +63,7 @@ def ir_a_entrega(driver, entrega, urlCurrent):
     entrega.find_element_by_class_name('reltop25').click()
     try:
         WebDriverWait(driver, 10).until(
-            EC.text_to_be_present_in_element((By.ID, 'lblNombreActividad'), nombre))
+            EC.presence_of_element_located((By.ID, 'lblNombreActividad')))
     except:
         raise excepciones.EntregasException('No se puede acceder a la entrega solicitada')
 

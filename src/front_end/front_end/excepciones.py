@@ -3,3 +3,6 @@ class TokenException(Exception):
 
 class CursosException(Exception):
     pass
+
+class ExtraccionException(Exception):
+    pass

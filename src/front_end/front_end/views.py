@@ -36,12 +36,13 @@ def login(request):
 @esta_logueado
 def listar_cursos(request):
     t = 'lista_cursos.html'
+    try:
+        token = back_end.regresar_token_sesion()
+    except excepciones.TokenException as err:
+        request.session['logueado'] = False
+        return redirect('/logout/')
+
     if request.method == 'GET':
-        try:
-            token = back_end.regresar_token_sesion()
-        except excepciones.TokenException as err:
-            request.session['logueado'] = False
-            return redirect('/logout/')
         cache = None
         try:
             terminados = request.GET.get('terminados', False)
@@ -71,9 +72,22 @@ def listar_cursos(request):
         return render(request, t, {'cursos': cursos})
 
     elif request.method == 'POST':
-        ids = request.POST.get('ids', '')
-        print(ids)
+        try:
+            respuesta = back_end.iniciar_extraccion(request, token)
+            request.session['job_id'] = respuesta
+            return redirect('/info_extraccion/')
+        except excepciones.ExtraccionException as err:
+            request.session['errores'] = err.__str__()
+            request.session['logueado'] = False
+            return redirect('/logout/')
 
+
+@esta_logueado
+def info_extraccion(request):
+    if request.method == 'GET':
+        t = 'info_extraccion.html'
+        return render(request, t, {'id': request.session.get('job_id', 'nada')})
+        
 @esta_logueado
 def logout(request):
     request.session.flush()

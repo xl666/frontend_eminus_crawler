@@ -169,8 +169,10 @@ def extraer_evidencias_lista_cursos(driver, cursos, lista, ruta, terminados=Fals
     for elemento in lista:
         curso = cursos[elemento]
         nombre = get_nombre_curso(curso)
+        fecha = get_fecha_curso(curso)
         salidas.imprimir_salida('Extrayendo datos de curso: %s' % nombre, 1)
-        salida = almacenamiento.crear_ruta(ruta, nombre)
+        salida0 = almacenamiento.crear_ruta(ruta, fecha)
+        salida = almacenamiento.crear_ruta(salida0, nombre)
         extraer_evidencias_curso(driver, cursos, elemento, salida, terminados)
 
         driver.get(URL_MAIN)
