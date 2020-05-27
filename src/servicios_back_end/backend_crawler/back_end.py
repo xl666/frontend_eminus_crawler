@@ -22,14 +22,11 @@ def regresar_cursos(usuario, password, terminados=False):
 
 def execute(cmd):
     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, bufsize=0)
-    salida = popen.stdout.read(100)
-    while salida:
-        yield salida
-        salida = popen.stdout.read(100)
     popen.stdout.close()
-    _, err = popen.communicate()
+    salida, err = popen.communicate()
     if err:
         raise subprocess.CalledProcessError(err, cmd)
+    return salida
 
 def extraer(usuario, password, ids, path_salida, terminados=False, procesos=1):
     os.environ.putenv('usuario_eminus', usuario.strip())
@@ -42,12 +39,10 @@ def extraer(usuario, password, ids, path_salida, terminados=False, procesos=1):
     job.meta['usuario'] = usuario
     job.meta['info'] = ''
     job.save_meta()
-
+    salida = 'ERROR'
     try:
-        for info in execute(comando):
-            job.refresh()
-            job.meta['info'] += info.decode('utf-8')
-            job.save_meta()
+        salida = execute(comando)
+        # es neecsario manejar bitacora aca
     except Exception as err:
         return err.__str__()
     finally:
@@ -55,7 +50,7 @@ def extraer(usuario, password, ids, path_salida, terminados=False, procesos=1):
         os.environ.putenv('password_eminus', '')
 
 
-    return True
+    return salida
     
 
 def calendarizar_trabajo_extraccion(usuario, password, ids, path_salida, terminados=False):

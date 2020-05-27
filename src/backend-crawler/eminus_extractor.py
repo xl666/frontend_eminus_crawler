@@ -88,6 +88,7 @@ def listar_cursos(terminados=False):
     cursos = cr.regresar_cursos(driver)
     print(cr.ver_cursos(cursos))
 
+
 def run_process(terminados, idCurso, directorio, usuario, password, color=salidas.colores[0]):
     driver = config.configure()
     salidas.color_default = color
@@ -99,12 +100,16 @@ def run_process(terminados, idCurso, directorio, usuario, password, color=salida
         cr.extraer_evidencias_lista_cursos(driver, cursos, [idCurso], directorio, terminados)
     except KeyError as e:
         print('El id dado %s no existe, aseguráte de no estar usando el nrc, lista opciones de ids con -l o --listar, si es un curso terminado aseguráte de activar la opción -t' % e)
-        exit(1)
+        return
+    except Exception as e:
+            print('{"Error": "%s"}' % e.__str__())
+            return
     finally:
         driver.close()
     salidas.imprimir_salida('Fin de extracción')
-    
-@decoradores.manejar_errores_credenciales
+    print('{"Salida": "%s"}' % directorio)
+
+
 def extraer_evidencias(terminados, evidencias, directorio, procesos=1):
     tiempo1 = time.time()
     usuario, password = credenciales.recuperar_credenciales_env()
@@ -119,7 +124,7 @@ def extraer_evidencias(terminados, evidencias, directorio, procesos=1):
     recolectorArchivos.COLA_MENSAJES.put(('exit','exit'))
     despachador.join()
     tiempo2 = time.time()
-    print('Extracción finalizada en {:.2f} segundos'.format(tiempo2 - tiempo1))
+    #print('Extracción finalizada en {:.2f} segundos'.format(tiempo2 - tiempo1))
     
 if __name__ == '__main__':
 

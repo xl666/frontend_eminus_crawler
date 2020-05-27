@@ -1,7 +1,8 @@
 from selenium import webdriver
 import sys
+import os
 
-salida = sys.stdout
+salida = os.environ.get('LOG_PATH', '/tmp/log.txt')
 MAX_PROCESS = 10 # Para el pull de procesos, no se recomienda más grande
 MAX_DOWNLOAD_CONNECTIONS = 30 # limirar para evitar DOS en servidor
 

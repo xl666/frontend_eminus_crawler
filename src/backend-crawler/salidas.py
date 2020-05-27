@@ -5,6 +5,7 @@ de información en la aplicación
 
 import config
 
+
 colores = (
     "\033[0m",   # End of color
     "\033[36m",  # Cyan
@@ -32,10 +33,11 @@ class Coloreador():
         print("\033[0m", end='')
 
 def imprimir_salida(texto, nivel=0):
+    archivo = open(config.salida, 'at')
     for i in range(nivel):
-        print('  ', end='', file=config.salida)
-    with Coloreador(color_default):
-        print(texto, file=config.salida)
+        archivo.write('  ')    
+    archivo.write(texto + '\n')
+    archivo.close()
 
 
 if __name__ == '__main__':
