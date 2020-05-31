@@ -2,7 +2,7 @@
 
 {% block titulo %}Cursos{% endblock %}
 
-{% block encabezado %}Lista de cursos{% endblock %}
+{% block encabezado %}Selección de cursos{% endblock %}
 {% block estilos %}
 <link rel="stylesheet" href="/static/css/estilo.css">
 {% endblock %}
@@ -22,48 +22,61 @@
 <a class="btn btn-info" role="button" href="/listar_cursos?terminados=true">Cursos Terminados</a>
 <br />
 <br />
-<table class="table">
-    <thead>
-      <tr>
-        <th class="hide">eminus_id</th>
-	<th>Seleccionar</th>
-        <th>Periodo</th>
-        <th>Nombre</th>
-      </tr>
-    </thead>
-    <tbody id="tabla_cursos">
-    {% for curso in cursos %}
-    <tr>
-      <td class="hide">{{ curso.id_eminus }}</td>
-      <td>
-	<div class="checkbox">
-	  <label><input type="checkbox" value=""></label>
-	</div>
-      </td>
-      <td>{{ curso.periodo }}</td>
-      <td>{{ curso.nombre }}</td>
-    </tr>
-    {% endfor %}
 
-
-    </tbody>
-  </table>
-
-<div class="row">
-  <div class="col-sm-5">
+<div class="panel panel-info">
+  <div class="panel-heading text-center">
+    {% if terminados %}
+    <strong>Cursos Terminados</strong>
+    {% else %}
+    <strong>Cursos Actuales</strong>
+    {% endif %}
   </div>
-  <div class="col-sm-5">
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+	<tr>
+          <th class="hide">eminus_id</th>
+	  <th>Seleccionar</th>
+          <th>Periodo</th>
+          <th>Nombre</th>
+	</tr>
+      </thead>
+      <tbody id="tabla_cursos">
+	{% for curso in cursos %}
+	<tr>
+	  <td class="hide">{{ curso.id_eminus }}</td>
+	  <td>
+	    <div class="checkbox">
+	      <label><input type="checkbox" value=""></label>
+	    </div>
+	  </td>
+	  <td>{{ curso.periodo }}</td>
+	  <td>{{ curso.nombre }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-sm-5">
+      </div>
+      <div class="col-sm-5">
+      </div>
+      
+      <form class="col-sm-2" method="POST" action="/listar_cursos/" id="formulario">
+	{% csrf_token %}
+	<input type="hidden" name="ids" id="ids" value=""/>
+	<input type="hidden" name="periodos" id="periodos" value=""/>
+	<input type="hidden" name="nombres" id="nombres" value=""/>
+	<input type="hidden" name="terminados" id="terminados" value=""/>
+	<button type="submit"  class="btn btn-primary" id="botonExtraccion">Extraer evidencias</button> 
+      </form>
+    </div>
   </div>
-
-  <form class="col-sm-2" method="POST" action="/listar_cursos/" id="formulario">
-    {% csrf_token %}
-    <input type="hidden" name="ids" id="ids" value=""/>
-    <input type="hidden" name="periodos" id="periodos" value=""/>
-    <input type="hidden" name="nombres" id="nombres" value=""/>
-    <input type="hidden" name="terminados" id="terminados" value=""/>
-    <button type="submit"  class="btn btn-primary" id="botonExtraccion">Extraer evidencias</button> 
-  </form>
 </div>
+
+
+
+
 {% endblock %}
 
 

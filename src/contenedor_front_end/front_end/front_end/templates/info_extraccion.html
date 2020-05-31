@@ -2,7 +2,7 @@
 
 {% block titulo %}Cursos{% endblock %}
 
-{% block encabezado %}Lista de cursos{% endblock %}
+{% block encabezado %}Extracciones{% endblock %}
 {% block estilos %}
 <link rel="stylesheet" href="/static/css/estilo.css">
 {% endblock %}
@@ -11,6 +11,28 @@
 {% endblock %}
 
 {% block contenido %}
+
+{% if pendientes %}
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Periodo</th>
+        <th>Nombre</th>
+	<th>Estatus</th>
+      </tr>
+    </thead>
+    <tbody id="tabla_cursos">
+    {% for info in pendientes %}
+    <tr>
+      <td>{{ info.periodo }}</td>
+      <td>{{ info.nombre }}</td>
+      <td>{{ info.estatus }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
 
 <b>Extrayendo...</b>
 {{ id }}

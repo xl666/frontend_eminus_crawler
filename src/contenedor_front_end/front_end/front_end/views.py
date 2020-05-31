@@ -69,7 +69,7 @@ def listar_cursos(request):
             if not cache:
                 request.session['cache_cursos_actuales'] = cursos
         
-        return render(request, t, {'cursos': cursos})
+        return render(request, t, {'cursos': cursos, 'terminados': terminados})
 
     elif request.method == 'POST':
         try:
