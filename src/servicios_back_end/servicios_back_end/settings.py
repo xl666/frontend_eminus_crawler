@@ -19,6 +19,8 @@ PATH_BACK_END = f'{BASE_DIR}/../backend-crawler'
 
 MEDIA_DIR = f'{BASE_DIR}/media'
 
+BITACORAS_DIR = f'{BASE_DIR}/bitacoras'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 

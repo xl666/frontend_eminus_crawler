@@ -107,7 +107,7 @@ def run_process(terminados, idCurso, directorio, usuario, password, color=salida
     finally:
         driver.close()
     salidas.imprimir_salida('Fin de extracción')
-    print('{"Salida": "%s"}' % directorio)
+    print('{"OK": "OK"}')
 
 
 def extraer_evidencias(terminados, evidencias, directorio, procesos=1):
