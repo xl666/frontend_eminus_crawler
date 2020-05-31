@@ -19,6 +19,10 @@
       </div>
     </header>
 
+    {% block nav %}
+       {% include 'nav.html' %}
+    {% endblock %}
+    
     <section class="container">
       {% block contenido %}{% endblock %}
     </section>

@@ -23,17 +23,17 @@
     <table class="table table-striped">
       <thead>
 	<tr>
-          <th>Periodo</th>
-          <th>Nombre</th>
-	  <th>Estatus</th>
+          <th class="text-center">Periodo</th>
+          <th class="text-center">Nombre</th>
+	  <th class="text-center">Estatus</th>
 	</tr>
       </thead>
       <tbody id="tabla_cursos">
 	{% for info in pendientes %}
 	<tr>
-	  <td>{{ info.periodo }}</td>
-	  <td>{{ info.nombre }}</td>
-	  <td>{{ info.estatus }}</td>
+	  <td class="text-center">{{ info.periodo }}</td>
+	  <td class="text-center">{{ info.nombre }}</td>
+	  <td class="text-center">{{ info.estatus }}</td>
 	</tr>
 	{% endfor %}
       </tbody>
@@ -56,15 +56,15 @@
     <table class="table table-striped">
       <thead>
 	<tr>
-          <th>Periodo</th>
-          <th>Nombre</th>
+          <th class="text-center">Periodo</th>
+          <th class="text-center">Nombre</th>
 	</tr>
       </thead>
       <tbody id="tabla_cursos">
 	{% for elemento in historial %}
 	<tr>
-	  <td>{{ elemento.periodo }}</td>
-	  <td>{{ elemento.nombre }}</td>
+	  <td class="text-center">{{ elemento.periodo }}</td>
+	  <td class="text-center">{{ elemento.nombre }}</td>
 	</tr>
 	{% endfor %}
       </tbody>

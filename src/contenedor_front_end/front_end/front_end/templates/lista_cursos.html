@@ -2,7 +2,7 @@
 
 {% block titulo %}Cursos{% endblock %}
 
-{% block encabezado %}Selección de cursos{% endblock %}
+{% block encabezado %}Nueva extracción{% endblock %}
 {% block estilos %}
 <link rel="stylesheet" href="/static/css/estilo.css">
 {% endblock %}
@@ -36,9 +36,9 @@
       <thead>
 	<tr>
           <th class="hide">eminus_id</th>
-	  <th>Seleccionar</th>
-          <th>Periodo</th>
-          <th>Nombre</th>
+	  <th class="text-center">Seleccionar</th>
+          <th class="text-center">Periodo</th>
+          <th class="text-center">Nombre</th>
 	</tr>
       </thead>
       <tbody id="tabla_cursos">
@@ -46,12 +46,12 @@
 	<tr>
 	  <td class="hide">{{ curso.id_eminus }}</td>
 	  <td>
-	    <div class="checkbox">
+	    <div class="checkbox text-center">
 	      <label><input type="checkbox" value=""></label>
 	    </div>
 	  </td>
-	  <td>{{ curso.periodo }}</td>
-	  <td>{{ curso.nombre }}</td>
+	  <td class="text-center">{{ curso.periodo }}</td>
+	  <td class="text-center">{{ curso.nombre }}</td>
 	</tr>
 	{% endfor %}
       </tbody>
