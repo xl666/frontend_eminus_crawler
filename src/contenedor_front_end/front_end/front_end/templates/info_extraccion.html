@@ -12,30 +12,69 @@
 
 {% block contenido %}
 
-{% if pendientes %}
-<table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Periodo</th>
-        <th>Nombre</th>
-	<th>Estatus</th>
-      </tr>
-    </thead>
-    <tbody id="tabla_cursos">
-    {% for info in pendientes %}
-    <tr>
-      <td>{{ info.periodo }}</td>
-      <td>{{ info.nombre }}</td>
-      <td>{{ info.estatus }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
 
-{% endif %}
+<div class="panel panel-info">
+  <div class="panel-heading text-center">
+    Extracciones actuales
+  </div>
+  
+  <div class="panel-body">
+    {% if pendientes %}
+    <table class="table table-striped">
+      <thead>
+	<tr>
+          <th>Periodo</th>
+          <th>Nombre</th>
+	  <th>Estatus</th>
+	</tr>
+      </thead>
+      <tbody id="tabla_cursos">
+	{% for info in pendientes %}
+	<tr>
+	  <td>{{ info.periodo }}</td>
+	  <td>{{ info.nombre }}</td>
+	  <td>{{ info.estatus }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>    
+    {% else %}
+    <strong>No hay extracciones pendientes</strong>    
+    {% endif %}
+  </div>
+</div>
 
-<b>Extrayendo...</b>
-{{ id }}
+
+<div class="panel panel-info">
+  <div class="panel-heading text-center">
+    Historial de extracciones finalizadas
+  </div>
+  
+  <div class="panel-body">
+    
+    {% if historial %}
+    <table class="table table-striped">
+      <thead>
+	<tr>
+          <th>Periodo</th>
+          <th>Nombre</th>
+	</tr>
+      </thead>
+      <tbody id="tabla_cursos">
+	{% for elemento in historial %}
+	<tr>
+	  <td>{{ elemento.periodo }}</td>
+	  <td>{{ elemento.nombre }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>    
+    {% else %}
+    <strong>No hay extracciones en el historial</strong>    
+    {% endif %}      
+  </div>
+</div>
+
 
 {% endblock %}
 
