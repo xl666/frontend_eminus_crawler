@@ -42,16 +42,28 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
     job.meta['periodo'] = periodo
     job.meta['nombre'] = nombre
     job.save_meta()
+
     salida = 'ERROR'
     path_bitacora = settings.BITACORAS_DIR + '/%s' % job.id
     try:
         salida = execute(comando, path_bitacora)
     except Exception as err:
+        with open(path_bitacora, 'ta') as archivo:
+            archivo.write('\nERROR:\n')
+            archivo.write(err.__str__())
         return err.__str__()
     finally:
         os.environ.putenv('usuario_eminus', '')
         os.environ.putenv('password_eminus', '')
+        with open(path_bitacora, 'ta') as archivo:
+            archivo.write('\nSalida:\n')
+            archivo.write(salida)
+            archivo.write('\n')
+        # liberar aqui trabajo pendiente aunque tengan errores
 
+        # Almacenar trabajos terminados con exito
+        if not 'Error' in salida:
+            pass
 
     return salida
     
@@ -64,4 +76,5 @@ def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, p
         id_eminus, periodo, nombre = partes
         job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=7200)
         jobs.append(job.id)
+        # agregar aqui registro de trabajo pendiente
     return jobs
