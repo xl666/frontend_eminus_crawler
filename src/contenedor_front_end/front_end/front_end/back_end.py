@@ -134,15 +134,17 @@ def regresar_cursos(request, token, terminados=False):
 
 def iniciar_extraccion(request, token):
     ids = request.POST.get('ids', '')
+    periodos = request.POST.get('periodos', '')
+    nombres = request.POST.get('nombres', '')
     terminados = request.POST.get('terminados', False)
     if terminados:
         terminados = True
-    if not ids:
+    if not ids or not nombres or not periodos:
         raise excepciones.ExtraccionException('No hay cursos seleccionados')
     
     url_extraccion = settings.URL_SERVICIOS + '/extraer_evidencias/'
     usuario, password = unwrap_llaves(request)
-    headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8'), 'password-eminus': password.decode('utf-8'), "ids": ids}
+    headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8'), 'password-eminus': password.decode('utf-8'), 'ids': ids, 'periodos': periodos, 'nombres': nombres}
     if terminados:
         headers['terminados'] = "true"
     respuesta = requests.get(url_extraccion, headers=headers)
