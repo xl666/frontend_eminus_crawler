@@ -7,6 +7,10 @@ from rq import Queue
 from rq import get_current_job
 from rq.job import Job
 
+import django
+django.setup()
+from backend_crawler import models
+
 
 def regresar_cursos(usuario, password, terminados=False):
     os.environ.putenv('usuario_eminus', usuario.strip())
@@ -22,6 +26,15 @@ def regresar_cursos(usuario, password, terminados=False):
         return None
     return json.loads(stdout)
 
+def almacenar_trabajo_terminado(bitacora, id_eminus, usuario, periodo, nombre):
+    resultados = models.Trabajos_terminados.objects.filter(idEminus=id_eminus, usuario=usuario, periodo=periodo, nombre=nombre)
+    if len(resultados) == 0:
+        models.Trabajos_terminados(bitacora=bitacora, idEminus=id_eminus, usuario=usuario, periodo=periodo, nombre=nombre).save()
+    else:
+        registro = resultados[0]
+        registro.bitacora = bitacora
+        registro.save()
+
 def execute(cmd, path_bitacora):
     os.environ.putenv('LOG_PATH', path_bitacora)
     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -29,6 +42,7 @@ def execute(cmd, path_bitacora):
     if err:
         raise subprocess.CalledProcessError(err, cmd)
     return salida
+
 
 def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminados=False, procesos=1):
     os.environ.putenv('usuario_eminus', usuario.strip())
@@ -57,13 +71,11 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
         os.environ.putenv('password_eminus', '')
         with open(path_bitacora, 'ta') as archivo:
             archivo.write('\nSalida:\n')
-            archivo.write(salida)
+            archivo.write(salida.decode('utf-8'))
             archivo.write('\n')
-        # liberar aqui trabajo pendiente aunque tengan errores
-
         # Almacenar trabajos terminados con exito
-        if not 'Error' in salida:
-            pass
+        if not b'Error' in salida:
+            almacenar_trabajo_terminado(job.id, id_eminus, usuario, periodo, nombre)
 
     return salida
     
@@ -74,7 +86,6 @@ def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, p
     jobs = []    
     for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
         id_eminus, periodo, nombre = partes
-        job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=7200)
-        jobs.append(job.id)
-        # agregar aqui registro de trabajo pendiente
+        job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=3600)
+        jobs.append(job.id)        
     return jobs
