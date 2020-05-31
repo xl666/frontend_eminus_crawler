@@ -36,10 +36,14 @@ def extraer_evidencias(request):
         usuario = request.headers.get('usuario-eminus', '')
         password = request.headers.get('password-eminus', '')
         ids = request.headers.get('ids', '')
-        if not ids:
+        periodos = request.headers.get('periodos', '')
+        nombres = request.headers.get('nombres', '')
+        if not usuario or not password:
             return Response({'Error': 'No se tiene usuario y password'})
+        if not ids or not periodos or not nombres:
+            return Response({'Error': 'No se tiene informacion para extraer'})
         terminados = False
         if request.headers.get('terminados', None):
             terminados = True
-    job_id = back_end.calendarizar_trabajo_extraccion(usuario, password, ids, settings.MEDIA_DIR, terminados)
+    job_id = back_end.calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, settings.MEDIA_DIR, terminados)
     return Response({'Status': 'OK', 'Job_id': job_id})

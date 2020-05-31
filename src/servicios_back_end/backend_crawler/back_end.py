@@ -30,7 +30,7 @@ def execute(cmd, path_bitacora):
         raise subprocess.CalledProcessError(err, cmd)
     return salida
 
-def extraer(usuario, password, id_eminus, path_salida, terminados=False, procesos=1):
+def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminados=False, procesos=1):
     os.environ.putenv('usuario_eminus', usuario.strip())
     os.environ.putenv('password_eminus', password.strip())
     comando = f'python "{settings.PATH_BACK_END}/eminus_extractor.py" -e {id_eminus} -d "{path_salida}" -p {procesos}'
@@ -39,6 +39,8 @@ def extraer(usuario, password, id_eminus, path_salida, terminados=False, proceso
 
     job = get_current_job()
     job.meta['usuario'] = usuario
+    job.meta['periodo'] = periodo
+    job.meta['nombre'] = nombre
     job.save_meta()
     salida = 'ERROR'
     path_bitacora = settings.BITACORAS_DIR + '/%s' % job.id
@@ -54,11 +56,12 @@ def extraer(usuario, password, id_eminus, path_salida, terminados=False, proceso
     return salida
     
 
-def calendarizar_trabajo_extraccion(usuario, password, ids, path_salida, terminados=False):
+def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, path_salida, terminados=False):
     cola = Queue(connection=Redis())
     # dejar job en cola maximo un dia, el resultado maximo un dia, el job puede tardar hasta dos horas en ejecucion
-    jobs = []
-    for id_eminus in ids.split(','):
-        job = cola.enqueue(extraer, usuario, password, id_eminus, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=7200)
+    jobs = []    
+    for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
+        id_eminus, periodo, nombre = partes
+        job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=7200)
         jobs.append(job.id)
     return jobs
