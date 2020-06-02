@@ -6,3 +6,6 @@ class CursosException(Exception):
 
 class ExtraccionException(Exception):
     pass
+
+class HistorialTrabajoException(Exception):
+    pass

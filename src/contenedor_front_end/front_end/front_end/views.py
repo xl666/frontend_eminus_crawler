@@ -86,7 +86,14 @@ def listar_cursos(request):
 def info_extraccion(request):
     if request.method == 'GET':
         t = 'info_extraccion.html'
-        return render(request, t, {'id': request.session.get('job_id', 'nada')})
+        try:
+            token = back_end.regresar_token_sesion()
+        except excepciones.TokenException as err:
+            request.session['logueado'] = False
+            return redirect('/logout/')
+        trabajos = back_end.regresar_trabajos_terminados(request, token)
+        
+        return render(request, t, {'historial': trabajos})
         
 @esta_logueado
 def logout(request):

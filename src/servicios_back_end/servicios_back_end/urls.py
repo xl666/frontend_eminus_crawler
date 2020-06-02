@@ -20,5 +20,6 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path('cursos/', curso_list),
     path('extraer_evidencias/', extraer_evidencias),
+    path('trabajos_terminados/', regresar_historial_extracciones),
     path('autenticacion/', views.obtain_auth_token),
 ]
