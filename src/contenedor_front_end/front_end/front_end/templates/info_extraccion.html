@@ -33,7 +33,21 @@
 	<tr>
 	  <td class="text-center">{{ info.periodo }}</td>
 	  <td class="text-center">{{ info.nombre }}</td>
+	  {% if info.estatus == 'Terminado' %}
+	  <td class="text-center text-success">{{ info.estatus }}</td>
+
+	  {% elif info.estatus == 'Falló' %}
+	  <td class="text-center text-danger">{{ info.estatus }}</td>
+
+	  {% elif info.estatus == 'En cola' %}
+	  <td class="text-center text-warning">{{ info.estatus }}</td>
+
+	  {% elif info.estatus == 'En ejecución' %}
+	  <td class="text-center text-primary">{{ info.estatus }}</td>
+	  
+	  {% else %}
 	  <td class="text-center">{{ info.estatus }}</td>
+	  {% endif %}
 	</tr>
 	{% endfor %}
       </tbody>

@@ -7,8 +7,8 @@ from rest_framework.throttling import UserRateThrottle
 import json
 from backend_crawler import back_end
 from servicios_back_end import settings
-from backend_crawler import models
-from backend_crawler import serializers
+
+
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -57,9 +57,8 @@ def extraer_evidencias(request):
 def regresar_historial_extracciones(request):
     if request.method == 'GET':
         usuario = request.headers.get('usuario-eminus', '')
-        trabajos = models.Trabajos_terminados.objects.filter(usuario=usuario)
-        serializer = serializers.Trabajos_terminadosSerializer(trabajos, many=True)
-        return Response(serializer.data)
+        trabajos = back_end.regresar_trabajos_terminados(usuario)
+        return Response(trabajos)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])

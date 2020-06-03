@@ -1,16 +1,31 @@
 import subprocess
 import os
+import datetime
 from servicios_back_end import settings
 import json
 from redis import Redis
 from rq import Queue
 from rq import get_current_job
 from rq.job import Job
+from backend_crawler import models
+from backend_crawler import serializers
 
 import django
 django.setup()
 from backend_crawler import models
 
+
+MES_MAPPING = {'Ene': 1, 'Feb': 2, 'Mar': 3, 'Abr': 4, 'May': 5,
+               'Jun': 6, 'Jul': 7, 'Ago': 8, 'Sep': 9, 'Oct': 10,
+               'Nov': 11, 'Dic': 12}
+
+def regresar_date_texto(texto):
+    # Se recibe algo como 27/Jun/2018 - 17/Jul/2018
+    # Solo se considera primera fecha
+    fecha_texto = texto.split('-')[0].strip()
+    partes = fecha_texto.split('/')
+    return datetime.datetime(year=int(partes[2]), month=MES_MAPPING.get(partes[1]),
+                              day=int(partes[0]))
 
 def regresar_cursos(usuario, password, terminados=False):
     os.environ.putenv('usuario_eminus', usuario.strip())
@@ -107,3 +122,15 @@ def regresar_trabajos_actuales(usuario):
     redis_conn = Redis()
     q = Queue(connection=redis_conn)
     return encontrar_trabajos_cola(usuario, q, 'En cola') + encontrar_trabajos_cola(usuario, q.started_job_registry, 'En ejecución') + encontrar_trabajos_cola(usuario, q.failed_job_registry, 'Falló') + encontrar_trabajos_cola(usuario, q.finished_job_registry, 'Terminado')
+
+def ordenar_trabajos_fecha(trabajos):
+    fechas = [regresar_date_texto(t['periodo']) for t in trabajos]
+    pares = zip(trabajos, fechas)
+    ordenado = sorted(pares, key=lambda x: x[1])
+    return [p[0] for p in ordenado]
+
+def regresar_trabajos_terminados(usuario):
+    trabajos = models.Trabajos_terminados.objects.filter(usuario=usuario)
+    serializer = serializers.Trabajos_terminadosSerializer(trabajos, many=True)
+    ordenados = ordenar_trabajos_fecha(serializer.data)
+    return ordenados
