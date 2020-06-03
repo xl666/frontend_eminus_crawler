@@ -36,13 +36,13 @@
 	  {% if info.estatus == 'Terminado' %}
 	  <td class="text-center text-success">{{ info.estatus }}</td>
 
-	  {% elif info.estatus == 'Falló' %}
+	  {% elif info.estatus == 'Error' %}
 	  <td class="text-center text-danger">{{ info.estatus }}</td>
 
 	  {% elif info.estatus == 'En cola' %}
 	  <td class="text-center text-warning">{{ info.estatus }}</td>
 
-	  {% elif info.estatus == 'En ejecución' %}
+	  {% elif info.estatus == 'Ejecutando' %}
 	  <td class="text-center text-primary">{{ info.estatus }}</td>
 	  
 	  {% else %}
