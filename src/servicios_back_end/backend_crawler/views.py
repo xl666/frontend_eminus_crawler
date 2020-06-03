@@ -66,4 +66,7 @@ def regresar_historial_extracciones(request):
 @permission_classes([IsAuthenticated])
 @throttle_classes([UserRateThrottle])
 def regresar_extracciones_actuales(request):
-    pass
+    if request.method == 'GET':
+        usuario = request.headers.get('usuario-eminus', '')
+        trabajos = back_end.regresar_trabajos_actuales(usuario)
+        return Response(trabajos)

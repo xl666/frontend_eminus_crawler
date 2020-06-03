@@ -52,10 +52,7 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
         comando += ' -t'    
 
     job = get_current_job()
-    job.meta['usuario'] = usuario
-    job.meta['periodo'] = periodo
-    job.meta['nombre'] = nombre
-    job.save_meta()
+
 
     salida = 'ERROR'
     path_bitacora = settings.BITACORAS_DIR + '/%s' % job.id
@@ -87,5 +84,26 @@ def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, p
     for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
         id_eminus, periodo, nombre = partes
         job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=3600)
-        jobs.append(job.id)        
+        jobs.append(job.id)
+        job.meta['usuario'] = usuario
+        job.meta['periodo'] = periodo
+        job.meta['nombre'] = nombre
+        job.save_meta()
     return jobs
+
+def encontrar_trabajos_cola(usuario, cola, estatus='En cola'):
+    if cola.count == 0:
+        return []
+    resultados = []
+    redis_conn = Redis()
+    for id_job in cola.get_job_ids():
+        trabajo = Job.fetch(id_job, redis_conn)
+        if trabajo.meta.get('usuario', '') == usuario:
+            resultados.append({'nombre': trabajo.meta['nombre'], 'periodo': trabajo.meta['periodo'], 'estatus': estatus})
+    return resultados
+    
+    
+def regresar_trabajos_actuales(usuario):
+    redis_conn = Redis()
+    q = Queue(connection=redis_conn)
+    return encontrar_trabajos_cola(usuario, q, 'En cola') + encontrar_trabajos_cola(usuario, q.started_job_registry, 'En ejecución') + encontrar_trabajos_cola(usuario, q.failed_job_registry, 'Falló') + encontrar_trabajos_cola(usuario, q.finished_job_registry, 'Terminado')

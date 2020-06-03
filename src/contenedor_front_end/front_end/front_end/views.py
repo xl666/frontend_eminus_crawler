@@ -92,8 +92,9 @@ def info_extraccion(request):
             request.session['logueado'] = False
             return redirect('/logout/')
         trabajos = back_end.regresar_trabajos_terminados(request, token)
+        actuales = back_end.regresar_trabajos_actuales(request, token)
         
-        return render(request, t, {'historial': trabajos})
+        return render(request, t, {'historial': trabajos, 'pendientes': actuales})
         
 @esta_logueado
 def logout(request):

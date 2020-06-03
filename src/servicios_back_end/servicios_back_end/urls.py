@@ -21,5 +21,6 @@ urlpatterns = [
     path('cursos/', curso_list),
     path('extraer_evidencias/', extraer_evidencias),
     path('trabajos_terminados/', regresar_historial_extracciones),
+    path('trabajos_actuales/', regresar_extracciones_actuales),
     path('autenticacion/', views.obtain_auth_token),
 ]

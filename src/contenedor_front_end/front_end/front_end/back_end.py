@@ -168,3 +168,14 @@ def regresar_trabajos_terminados(request, token):
     else:
         trabajos = json.loads(respuesta.text)        
         return trabajos
+
+def regresar_trabajos_actuales(request, token):
+    url_servicio = settings.URL_SERVICIOS + '/trabajos_actuales/'
+    usuario, _ = unwrap_llaves(request)
+    headers = {'Authorization': 'Token %s' % token, 'usuario-eminus': usuario.decode('utf-8')}
+    respuesta = requests.get(url_servicio, headers=headers)
+    if respuesta.status_code != 200:
+        raise excepciones.HistorialTrabajoException('Hubo un error al recuperar las extracciones terminadas: %s' % respuesta.status_code)
+    else:
+        trabajos = json.loads(respuesta.text)        
+        return trabajos
