@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Acerca de{% endblock %}
+
+{% block encabezado %}Acerca de{% endblock %}
+
+{% block nav %}
+{% if logueado %}
+{% include 'nav.html' %}
+{% else %}
+{% include 'nav_simple.html' %}
+{% endif %}
+{% endblock %}
+
+{% block contenido %}
+
+<h3>Información general</h3>
+
+<ul>
+  <li class="text-justify">Este software no es parte de las herramientas oficiales de la Universidad Veracruzana y debe usarse bajo su propio riesgo.</li>
+  <li class="text-justify">Este software fue realizado en la facultad de Estadística e Informática para la extracción de evidencias de experiencias educativas alojadas en Eminus, sistema de la Universidad Veracruzana.</li>
+  <li class="text-justify">Esta herramienta ayuda a la recolección de evidencias durante procesos de acreditación.</li>
+</ul>
+<h3>Posibles preguntas</h3>
+
+<h4>¿Cómo funciona el sistema?</h4>
+<div class="text-justify">El sistema hace uso de diversas técnicas de web-scraping para simular la interacción de un usuario real con Eminus, a esto se le conoce en términos coloquiales como un bot. Por esta razón se le pide que introduzca sus credenciales de Eminus, de tal forma que el bot pueda tomar la identidad de usted y hacer la extracción en su nombre.</div>
+
+<h4>¿Es legal el sistema o puede ser bloqueado?</h4>
+<div class="text-justify">El sistema realiza las actividades que realizaría un usuario normal y nunca ejerce un efecto colateral en Eminus, esto es, nunca crea registros nuevos ni altera alguna información, simplemente lee la información que ya existe. En el desarrollo y operación del sistema se tiene especial cuidado de no sobrecargar a los servidores de Eminus, para que no se caiga en abusos que afecten a otros usuarios de Eminus y que además pudieran ser detectados como un uso malicioso. En gran parte por la razón anterior, notarás que muchas veces tus trabajos tardan en terminar o se encuentran en cola.</div>
+
+<h4>¿Qué tipo de información se extrae?</h4>
+<div class="text-justify">En la versión actual del sistema se extrae sólo información de prácticas y evaluaciones subidas por los estudiantes, la información es agrupada por actividad/evaluación y por estudiante a partir de su mátricula, o bien si es una actividad en equipo se agrupa por equipo. La información específicamente extraída es la siguiente:</div>
+
+<ul>
+  <li>Descripción de la actividad o evaluación en un archivo de texto</li>
+  <li>Captura de pantalla con la lista de estudiantes que entregaron la actividad o evaluación</li>
+  <li>Si el estudiante adjuntó archivos a la actividad se extraen todos</li>
+  <li>Si el estudiante escribió algo en la caja de respuesta se extrae en un archivo de texto</li>
+</ul>
+
+<h4>¿Dónde se almacena la información extraída?</h4>
+<div class="text-justify">En la facultad de Estadística e Informática contamos con un servidor de recolección de evidencias, las evidencias están directamente almacenadas ahí para su recuperación durante el proceso de acreditación.</div>
+
+<h4>¿Cómo sé que no se le dará un mal uso a mis credenciales?</h4>
+<div class="text-justify">Este software toma muy enserio aspectos de seguridad y privacidad de su información, para que usted tenga la confianza de que su información confidencial no será usada con fines diferentes a los de la herramienta o robada por terceros. Entre los elementos de seguridad principales destacan:</div>
+
+<ul>
+  <li>No se almacena su contraseña de miUV, salvo de forma temporal y cifrada para su uso durante la sesión de usuarios. El manejo seguro de credenciales fue el elemento principal de seguridad considerado. </li>
+
+  <li>Se utiliza una conexión protegida mediante HTTPS</li>
+
+  <li>Se utilizó una metodología de desarrollo seguro para su creación y herramientas de verificación de problemas de seguridad.</li>
+
+  <li>Todo el ambiente de despliegue del sistema fue cuidadosamente configurado teniendo en mente la seguridad</li>
+</ul>
+
+<div class="text-justify">Si aun con todo lo mencionado usted no se siente con la confianza de utilizar la herramienta, puede utilizar una versión que sólo funciona de forma local a través de la línea de comandos, sólo deberá posteriormente compartir los datos extraídos con las personas encargadas de la recolección de evidencias. Para más información del uso e instalación de esta versión ver:</div>
+
+<a href="https://github.com/xl666/crawler-eminus">Proyecto en github</a>
+
+
+<h3>Reporte de errores</h3>
+
+<div class="text-justify">Si usted detecta algún error general o en el procesamiento de alguna extracción, favor de reportarlo a hlimon@uv.mx, indicando, de aplicar, el usuario de miUV usado, el periodo y experiencia educativa asociada al problema.</div>
+
+{% endblock %}

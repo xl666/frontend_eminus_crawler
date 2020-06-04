@@ -95,7 +95,10 @@ def info_extraccion(request):
         actuales = back_end.regresar_trabajos_actuales(request, token)
         
         return render(request, t, {'historial': trabajos, 'pendientes': actuales})
-        
+
+def acerca_de(request):
+    return render(request, 'acerca.html', {'logueado': request.session.get('logueado', False)})
+    
 @esta_logueado
 def logout(request):
     request.session.flush()

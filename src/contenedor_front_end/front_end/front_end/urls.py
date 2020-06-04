@@ -22,5 +22,6 @@ urlpatterns = [
     path('login/', login),
     path('listar_cursos/', listar_cursos),
     path('info_extraccion/', info_extraccion),
+    path('acerca_de/', acerca_de),
     path('logout/', logout),
 ]
