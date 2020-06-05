@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.7'
 
 services:
 
@@ -20,6 +20,12 @@ services:
       - ./front_end:/code
     depends_on:
       - bd
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "250M"
+        
       
   bd:
     image: mariadb

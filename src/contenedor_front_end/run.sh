@@ -2,8 +2,7 @@
 
 sleep 15
 
-python3 -u manage.py makemigrations
-python3 -u manage.py migrate
+su -c 'python3 -u manage.py makemigrations' limitado
+su -c 'python3 -u manage.py migrate' limitado
 
-gunicorn --bind :8000 front_end.wsgi:application --reload
-
+su -c 'gunicorn --bind :8000 front_end.wsgi:application --reload' limitado

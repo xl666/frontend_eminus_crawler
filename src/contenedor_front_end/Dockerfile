@@ -20,8 +20,12 @@ RUN mkdir /code
 RUN mkdir /start
 
 COPY ./run.sh /start
-RUN chmod +x /start/run.sh
+RUN chmod 751 /start/run.sh
 
 WORKDIR /code
+
+RUN useradd -s /bin/bash limitado
+
+RUN chown -R limitado /code
 
 CMD /start/run.sh
