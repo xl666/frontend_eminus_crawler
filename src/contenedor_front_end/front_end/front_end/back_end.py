@@ -112,7 +112,7 @@ def regresar_token_sesion():
     data = {'username': settings.CLIENTE_SERVICIOS_USR, 'password': settings.CLIENTE_SERVICIOS_PWD}
     respuesta = requests.post(url_token, data=data)
     if respuesta.status_code != 200:
-        raise TokenException('No se pudo recuperar el token: %s' % respuesta.status_code)
+        raise excepciones.TokenException('No se pudo recuperar el token: %s' % respuesta.status_code)
     else:
         diccionario = json.loads(respuesta.text)
         return diccionario['token']

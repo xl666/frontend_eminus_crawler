@@ -11,8 +11,8 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       URL_SERVICIOS: ${URL_SERVICIOS}
-      CLIENTE_SERVICIOS_USR: ${SERVICIOS_USR}
-      CLIENTE_SERVICIOS_PWD: ${SERVICIOS_PWD}
+      CLIENTE_SERVICIOS_USR: ${CLIENTE_SERVICIOS_USR}
+      CLIENTE_SERVICIOS_PWD: ${CLIENTE_SERVICIOS_PWD}
     build: ./contenedor_front_end
     restart: always
     container_name: eminus_crawler_front_end
@@ -34,15 +34,16 @@ services:
       DB_SERVICIOS_PASSWORD: ${DB_SERVICIOS_PASSWORD}
       DB_SERVICIOS_HOST: ${DB_SERVICIOS_HOST}
       DB_SERVICIOS_PORT: ${DB_SERVICIOS_PORT}
-      CLIENTE_SERVICIOS_USR: ${SERVICIOS_USR}
-      CLIENTE_SERVICIOS_PWD: ${SERVICIOS_PWD}
+      CLIENTE_SERVICIOS_USR: ${CLIENTE_SERVICIOS_USR}
+      CLIENTE_SERVICIOS_PWD: ${CLIENTE_SERVICIOS_PWD}
     build: ./contenedor_back_end
     restart: always
     container_name: eminus_crawler_back_end
     volumes:
       - ./contenedor_back_end/backend-crawler:/code/backend-crawler
       - ./contenedor_back_end/servicios_back_end:/code/servicios_back_end
-
+    depends_on:
+      - bd_back_end
     deploy:
       resources:
         limits:
@@ -54,8 +55,8 @@ services:
     image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - ./contenedor_front_end/data:/var/lib/mysql
 
@@ -69,3 +70,22 @@ services:
       - front_end
     ports:
       - 8000:80
+
+  bd_back_end:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_SERVICIOS_PASSWORD}
+      MYSQL_DATABASE: ${DB_SERVICIOS_NAME}
+    volumes:
+      - ./contenedor_back_end/data:/var/lib/mysql
+
+  nginx_back_end:
+    image: nginx
+    restart: always
+    volumes:
+      - ./contenedor_back_end/config/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - back_end
+    ports:
+      - 8001:80

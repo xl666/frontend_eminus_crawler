@@ -25,7 +25,7 @@ BITACORAS_DIR = f'{BASE_DIR}/bitacoras'
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=jbjgkp5bj$$ikslo6s48=trqs#lk131n==xici(z914u1ro!b'
+SECRET_KEY = os.environ.get('SERVICIOS_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,11 +82,14 @@ WSGI_APPLICATION = 'servicios_back_end.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_SERVICIOS_NAME'),
+        'USER': os.environ.get('DB_SERVICIOS_USER'),
+        'PASSWORD': os.environ.get('DB_SERVICIOS_PASSWORD'),
+        'HOST': os.environ.get('DB_SERVICIOS_HOST'),
+        'PORT': os.environ.get('DB_SERVICIOS_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

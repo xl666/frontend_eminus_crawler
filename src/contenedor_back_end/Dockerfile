@@ -23,9 +23,6 @@ RUN mkdir -p /code/backend-crawler
 RUN mkdir -p /code/servicios_back_end
 RUN mkdir /start
 
-COPY ./run.sh /start
-RUN chmod 751 /start/run.sh
-
 WORKDIR /code
 
 RUN useradd -s /bin/bash limitado
@@ -36,5 +33,9 @@ RUN wget https://chromedriver.storage.googleapis.com/80.0.3987.106/chromedriver_
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
 
+WORKDIR /code/servicios_back_end
+
+COPY ./run.sh /start
+RUN chmod 751 /start/run.sh
 
 CMD /start/run.sh

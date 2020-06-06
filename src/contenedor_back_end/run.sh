@@ -8,5 +8,7 @@ sleep 15
 
 
 # Lanzar servidor
+su -c 'python3 -u manage.py makemigrations' limitado
+su -c 'python3 -u manage.py migrate' limitado
 
-echo "Hola mundo"
+su -c 'gunicorn --bind :8000 servicios_back_end.wsgi:application --reload' limitado
