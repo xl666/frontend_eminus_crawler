@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+
+  front_end:
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      URL_SERVICIOS: ${URL_SERVICIOS}
+      CLIENTE_SERVICIOS_USR: ${SERVICIOS_USR}
+      CLIENTE_SERVICIOS_PWD: ${SERVICIOS_PWD}
+    build: ./contenedor_front_end
+    restart: always
+    container_name: eminus_crawler_front_end
+    volumes:
+      - ./contenedor_front_end/front_end:/code
+    depends_on:
+      - bd_front_end
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "250M"
+
+  back_end:
+    environment:
+      SERVICIOS_SECRET_KEY: ${SERVICIOS_SECRET_KEY}
+      DB_SERVICIOS_NAME: ${DB_SERVICIOS_NAME}
+      DB_SERVICIOS_USER: ${DB_SERVICIOS_USER}
+      DB_SERVICIOS_PASSWORD: ${DB_SERVICIOS_PASSWORD}
+      DB_SERVICIOS_HOST: ${DB_SERVICIOS_HOST}
+      DB_SERVICIOS_PORT: ${DB_SERVICIOS_PORT}
+      CLIENTE_SERVICIOS_USR: ${SERVICIOS_USR}
+      CLIENTE_SERVICIOS_PWD: ${SERVICIOS_PWD}
+    build: ./contenedor_back_end
+    restart: always
+    container_name: eminus_crawler_back_end
+    volumes:
+      - ./contenedor_back_end/backend-crawler:/code/backend-crawler
+      - ./contenedor_back_end/servicios_back_end:/code/servicios_back_end
+
+    deploy:
+      resources:
+        limits:
+          cpus: "3"
+          memory: "3G"
+        
+      
+  bd_front_end:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./contenedor_front_end/data:/var/lib/mysql
+
+  nginx_front_end:
+    image: nginx
+    restart: always
+    volumes:
+      - ./contenedor_front_end/config/nginx/conf.d:/etc/nginx/conf.d
+      - ./contenedor_front_end/front_end/static:/static
+    depends_on:
+      - front_end
+    ports:
+      - 8000:80
