@@ -16,7 +16,6 @@ from backend_crawler import serializers
 MES_MAPPING = {'Ene': 1, 'Feb': 2, 'Mar': 3, 'Abr': 4, 'May': 5,
                'Jun': 6, 'Jul': 7, 'Ago': 8, 'Sep': 9, 'Oct': 10,
                'Nov': 11, 'Dic': 12}
-
 def regresar_date_texto(texto):
     # Se recibe algo como 27/Jun/2018 - 17/Jul/2018
     # Solo se considera primera fecha
@@ -81,7 +80,10 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
         os.environ.putenv('password_eminus', '')
         with open(path_bitacora, 'ta') as archivo:
             archivo.write('\nSalida:\n')
-            archivo.write(salida.decode('utf-8'))
+            if type(salida) != type(''):
+                archivo.write(salida.decode('utf-8'))
+            else:
+                archivo.write(salida)
             archivo.write('\n')
         # Almacenar trabajos terminados con exito
         if not b'Error' in salida:
@@ -91,7 +93,7 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
     
 
 def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, path_salida, terminados=False):
-    cola = Queue(connection=Redis())
+    cola = Queue(connection=Redis(host=settings.REDIS_HOST))
     # dejar job en cola maximo un dia, el resultado maximo un dia, el job puede tardar hasta dos horas en ejecucion
     jobs = []    
     for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
@@ -108,7 +110,7 @@ def encontrar_trabajos_cola(usuario, cola, estatus='En cola'):
     if cola.count == 0:
         return []
     resultados = []
-    redis_conn = Redis()
+    redis_conn = Redis(host=settings.REDIS_HOST)
     for id_job in cola.get_job_ids():
         trabajo = Job.fetch(id_job, redis_conn)
         if trabajo.meta.get('usuario', '') == usuario:
@@ -117,7 +119,7 @@ def encontrar_trabajos_cola(usuario, cola, estatus='En cola'):
     
     
 def regresar_trabajos_actuales(usuario):
-    redis_conn = Redis()
+    redis_conn = Redis(host=settings.REDIS_HOST)
     q = Queue(connection=redis_conn)
     return encontrar_trabajos_cola(usuario, q, 'En cola') + encontrar_trabajos_cola(usuario, q.started_job_registry, 'Ejecutando') + encontrar_trabajos_cola(usuario, q.failed_job_registry, 'Error') + encontrar_trabajos_cola(usuario, q.finished_job_registry, 'Terminado')
 

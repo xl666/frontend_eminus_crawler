@@ -7,4 +7,10 @@
 .pie {
     color: white;
     background-color: #00983e;
+    border-radius:3px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding:15px;
 }

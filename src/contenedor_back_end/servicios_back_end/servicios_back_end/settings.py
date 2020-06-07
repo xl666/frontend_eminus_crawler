@@ -21,6 +21,8 @@ MEDIA_DIR = f'{BASE_DIR}/media'
 
 BITACORAS_DIR = f'{BASE_DIR}/bitacoras'
 
+REDIS_HOST = os.environ.get('REDIS_HOST')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 

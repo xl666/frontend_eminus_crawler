@@ -36,6 +36,8 @@ services:
       DB_SERVICIOS_PORT: ${DB_SERVICIOS_PORT}
       CLIENTE_SERVICIOS_USR: ${CLIENTE_SERVICIOS_USR}
       CLIENTE_SERVICIOS_PWD: ${CLIENTE_SERVICIOS_PWD}
+      WORKERS: 3
+      REDIS_HOST: redis
     build: ./contenedor_back_end
     restart: always
     container_name: eminus_crawler_back_end
@@ -44,6 +46,7 @@ services:
       - ./contenedor_back_end/servicios_back_end:/code/servicios_back_end
     depends_on:
       - bd_back_end
+      - redis
     deploy:
       resources:
         limits:
@@ -89,3 +92,7 @@ services:
       - back_end
     ports:
       - 8001:80
+
+  redis:
+    image: redis
+    restart: always

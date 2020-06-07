@@ -18,6 +18,8 @@ ENV DB_SERVICIOS_HOST=""
 ENV DB_SERVICIOS_PORT=3306
 ENV CLIENTE_SERVICIOS_USR=""
 ENV CLIENTE_SERVICIOS_PWD=""
+ENV REDIS_HOST=""
+ENV WORKERS=1
 
 RUN mkdir -p /code/backend-crawler
 RUN mkdir -p /code/servicios_back_end

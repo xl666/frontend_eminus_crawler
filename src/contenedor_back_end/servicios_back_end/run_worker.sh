@@ -3,4 +3,4 @@
 # aqui extraer archivo env cifrado
 
 export DJANGO_SETTINGS_MODULE=servicios_back_end.settings
-rq worker default --disable-job-desc-logging
+rq worker default --disable-job-desc-logging --url redis://${REDIS_HOST}:6379
