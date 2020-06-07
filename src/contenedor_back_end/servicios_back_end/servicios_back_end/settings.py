@@ -23,6 +23,8 @@ BITACORAS_DIR = f'{BASE_DIR}/bitacoras'
 
 REDIS_HOST = os.environ.get('REDIS_HOST')
 
+MAX_WORKS = 50
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -136,6 +138,6 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'user': '500/day'
+        'user': '1000/day'
     }
 }

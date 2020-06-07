@@ -94,8 +94,11 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
 
 def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, path_salida, terminados=False):
     cola = Queue(connection=Redis(host=settings.REDIS_HOST))
-    # dejar job en cola maximo un dia, el resultado maximo un dia, el job puede tardar hasta dos horas en ejecucion
-    jobs = []    
+    # dejar job en cola maximo un dia, el resultado maximo un dia, el job puede tardar hasta una hora en ejecucion
+    jobs = []
+    trabajos_activos = total_trabajos_ejecucion(usuario)
+    if trabajos_activos >= settings.MAX_WORKS:
+        return []
     for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
         id_eminus, periodo, nombre = partes
         job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=3600)
@@ -104,6 +107,9 @@ def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, p
         job.meta['periodo'] = periodo
         job.meta['nombre'] = nombre
         job.save_meta()
+        trabajos_activos += 1
+        if trabajos_activos >= settings.MAX_WORKS:
+            return jobs
     return jobs
 
 def encontrar_trabajos_cola(usuario, cola, estatus='En cola'):
@@ -117,7 +123,13 @@ def encontrar_trabajos_cola(usuario, cola, estatus='En cola'):
             resultados.append({'nombre': trabajo.meta['nombre'], 'periodo': trabajo.meta['periodo'], 'estatus': estatus})
     return resultados
     
-    
+
+def total_trabajos_ejecucion(usuario):
+    redis_conn = Redis(host=settings.REDIS_HOST)
+    q = Queue(connection=redis_conn)
+    colas = encontrar_trabajos_cola(usuario, q, 'En cola') + encontrar_trabajos_cola(usuario, q.started_job_registry, 'Ejecutando')
+    return len(colas)
+
 def regresar_trabajos_actuales(usuario):
     redis_conn = Redis(host=settings.REDIS_HOST)
     q = Queue(connection=redis_conn)
