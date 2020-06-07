@@ -11,7 +11,6 @@ import login
 import cursos as cr
 import config
 import excepciones
-import cifrado
 import decoradores
 import credenciales
 import multiprocessing
@@ -63,19 +62,6 @@ def validar_combinaciones(opcionC,  opcionL, opcionE, opcionD):
     
     return True
 
-@decoradores.manejar_errores_credenciales
-def crear_credenciales():
-    usuario = input('Usuario eminus: ')
-    password1 = getpass.getpass('Contraseña eminus: ')
-    password2 = getpass.getpass('Repetir contraseña eminus: ')
-    pw1 = getpass.getpass('Frase para recuperar credenciales: ')
-    pw2 = getpass.getpass('Repetir frase: ')
-    if password1 != password2 or pw1 != pw2:
-        raise excepciones.CredencialesException('Los passwords no concuerdan')
-    if ':' in usuario or ':' in password1:
-        raise excepciones.CredencialesException('No se puede usar el caracter :')
-    mensaje = cifrado.cifrar('%s:%s' % (usuario, password1), pw1, credenciales.SALT)
-    credenciales.guardar_credenciales(mensaje)
 
 
 @decoradores.manejar_errores_credenciales

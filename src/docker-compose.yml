@@ -80,7 +80,7 @@ services:
     volumes:
       - ./contenedor_back_end/data:/var/lib/mysql
 
-  nginx_back_end:
+  servicios:
     image: nginx
     restart: always
     volumes:

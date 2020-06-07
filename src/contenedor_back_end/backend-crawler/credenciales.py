@@ -2,7 +2,6 @@
 import os
 import getpass
 import excepciones
-import cifrado
 import sys
 
 BASE_DIR = os.path.dirname((os.path.abspath(__file__)))
@@ -26,17 +25,4 @@ def recuperar_credenciales_env():
         raise excepciones.CredencialesException('No se encontraron las variables de entorno necesarias')
     return usuario, pw
     
-def recuperar_credenciales():
-    try:
-        with open('%s/%s' % (BASE_DIR, 'credenciales.cif'), 'rb') as archivo:
-            contenido = archivo.read()
-            password = getpass.getpass('Frase para recuperar credenciales: ')
-            mensaje = cifrado.descifrar(contenido, password, SALT)
-            mensaje = mensaje.decode('utf-8')
-            usuario, pw = mensaje.split(':')
-            return usuario, pw
-    except FileNotFoundError as err:
-        print(err)
-        raise excepciones.CredencialesException('No se encontró el archivo credenciales.cif')
-    except Exception as err:
-        raise excepciones.CredencialesException('Es posible que la frase dada no coincida')
+
