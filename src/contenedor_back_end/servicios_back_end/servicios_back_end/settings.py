@@ -30,7 +30,7 @@ REDIS_HOST = os.environ.get('REDIS_HOST')
 SECRET_KEY = os.environ.get('SERVICIOS_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

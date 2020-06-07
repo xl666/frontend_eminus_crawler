@@ -90,8 +90,6 @@ services:
       - ./contenedor_back_end/config/nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - back_end
-    ports:
-      - 8001:80
 
   redis:
     image: redis
