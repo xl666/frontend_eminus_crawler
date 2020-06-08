@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block titulo %}Cursos{% endblock %}
 
 {% block encabezado %}Nueva extracción{% endblock %}
 {% block estilos %}
-<link rel="stylesheet" href="/static/css/estilo.css">
+<link rel="stylesheet" href="{% static 'css/estilo.css' %}">
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/js/cursos.js"></script>
+<script src="{% static 'js/cursos.js' %}"></script>
 {% endblock %}
 
 {% block contenido %}
@@ -62,7 +63,7 @@
       <div class="col-sm-5">
       </div>
       
-      <form class="col-sm-2" method="POST" action="/listar_cursos/" id="formulario">
+      <form class="col-sm-2" method="POST" action="{% url 'listar_cursos' %}" id="formulario">
 	{% csrf_token %}
 	<input type="hidden" name="ids" id="ids" value=""/>
 	<input type="hidden" name="periodos" id="periodos" value=""/>

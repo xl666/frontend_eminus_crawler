@@ -13,7 +13,7 @@ def login(request):
         request.session['errores'] = None
         return render(request, t, {'errores': errores})
     elif request.method == 'GET':
-        return redirect('/listar_cursos')
+        return redirect('listar_cursos')
     elif request.method == 'POST' and not request.session.get('logueado', False):
         if back_end.dejar_pasar_peticion_login(request):
 
@@ -22,7 +22,7 @@ def login(request):
 
             llave_aes_usr, iv_usr, llave_aes_pwd, iv_pwd = back_end.wrap_llaves(request, usuario, contra)
 
-            respuesta = redirect('/listar_cursos')
+            respuesta = redirect('listar_cursos')
             respuesta.set_cookie('key1', llave_aes_usr, httponly=True, samesite='Strict')
             respuesta.set_cookie('key2', iv_usr, httponly=True, samesite='Strict')
             respuesta.set_cookie('key3', llave_aes_pwd, httponly=True, samesite='Strict')
@@ -40,7 +40,7 @@ def listar_cursos(request):
         token = back_end.regresar_token_sesion()
     except excepciones.TokenException as err:
         request.session['logueado'] = False
-        return redirect('/logout/')
+        return redirect('logout')
 
     if request.method == 'GET':
         cache = None
@@ -58,7 +58,7 @@ def listar_cursos(request):
         except excepciones.CursosException as err:
             request.session['errores'] = err.__str__()
             request.session['logueado'] = False
-            return redirect('/logout/')
+            return redirect('logout')
 
         if terminados:
             cache = request.session.get('cache_cursos_terminados', None)
@@ -75,11 +75,11 @@ def listar_cursos(request):
         try:
             respuesta = back_end.iniciar_extraccion(request, token)
             request.session['job_id'] = respuesta
-            return redirect('/info_extraccion/')
+            return redirect('info_extraccion')
         except excepciones.ExtraccionException as err:
             request.session['errores'] = err.__str__()
             request.session['logueado'] = False
-            return redirect('/logout/')
+            return redirect('logout')
 
 
 @esta_logueado
@@ -90,7 +90,7 @@ def info_extraccion(request):
             token = back_end.regresar_token_sesion()
         except excepciones.TokenException as err:
             request.session['logueado'] = False
-            return redirect('/logout/')
+            return redirect('logout')
         trabajos = back_end.regresar_trabajos_terminados(request, token)
         actuales = back_end.regresar_trabajos_actuales(request, token)
         
@@ -102,7 +102,7 @@ def acerca_de(request):
 @esta_logueado
 def logout(request):
     request.session.flush()
-    respuesta = redirect('/login')
+    respuesta = redirect('login')
     respuesta.delete_cookie('key1')
     respuesta.delete_cookie('key2')
     respuesta.delete_cookie('key3')

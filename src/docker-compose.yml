@@ -13,6 +13,7 @@ services:
       URL_SERVICIOS: ${URL_SERVICIOS}
       CLIENTE_SERVICIOS_USR: ${CLIENTE_SERVICIOS_USR}
       CLIENTE_SERVICIOS_PWD: ${CLIENTE_SERVICIOS_PWD}
+      PATH_PREFIX: extractor
     build: ./contenedor_front_end
     restart: always
     container_name: eminus_crawler_front_end

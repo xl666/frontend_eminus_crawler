@@ -24,7 +24,7 @@
 
   <div class="col-sm-3"></div>
   
-  <form method="POST" action="/login/" class="col-sm-6">
+  <form method="POST" action="{% url 'login' %}" class="col-sm-6">
     {% csrf_token %}
     
     <div class="panel panel-info">

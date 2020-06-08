@@ -6,5 +6,5 @@ def esta_logueado(view):
         if request.session.get('logueado', False):
             return view(request, *args, **kwargs)
         else:
-            return redirect('/login')
+            return redirect('login')
     return interna

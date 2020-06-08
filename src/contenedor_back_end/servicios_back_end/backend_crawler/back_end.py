@@ -101,7 +101,7 @@ def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, p
         return []
     for partes in zip(ids.split(','), periodos.split(','), nombres.split(',')):
         id_eminus, periodo, nombre = partes
-        job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=3600)
+        job = cola.enqueue(extraer, usuario, password, id_eminus, periodo, nombre, path_salida, terminados, result_ttl=86400, ttl=86400, job_timeout=3600, failure_ttl=86400)
         jobs.append(job.id)
         job.meta['usuario'] = usuario
         job.meta['periodo'] = periodo

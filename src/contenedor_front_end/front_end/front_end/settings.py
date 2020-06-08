@@ -21,6 +21,9 @@ INTENTOS_LOGIN = 5
 URL_SERVICIOS = os.environ.get('URL_SERVICIOS', '')
 CLIENTE_SERVICIOS_USR = os.environ.get('CLIENTE_SERVICIOS_USR', '')
 CLIENTE_SERVICIOS_PWD = os.environ.get('CLIENTE_SERVICIOS_PWD', '')
+PATH_PREFIX = os.environ.get('PATH_PREFIX', '')
+if PATH_PREFIX and not PATH_PREFIX.endswith('/'):
+    PATH_PREFIX += '/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -37,7 +40,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -130,6 +132,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if PATH_PREFIX:
+    STATIC_URL = f'/{PATH_PREFIX}static/'
 
 STATICFILES_DIRS = (BASE_DIR + '/static', )
 

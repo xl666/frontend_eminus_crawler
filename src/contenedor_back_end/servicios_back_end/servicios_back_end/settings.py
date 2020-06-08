@@ -22,6 +22,10 @@ MEDIA_DIR = f'{BASE_DIR}/media'
 BITACORAS_DIR = f'{BASE_DIR}/bitacoras'
 
 REDIS_HOST = os.environ.get('REDIS_HOST')
+PATH_PREFIX = os.environ.get('PATH_PREFIX', '')
+if PATH_PREFIX and not PATH_PREFIX.endswith('/'):
+    PATH_PREFIX += '/'
+
 
 MAX_WORKS = 50
 

@@ -20,6 +20,7 @@ ENV CLIENTE_SERVICIOS_USR=""
 ENV CLIENTE_SERVICIOS_PWD=""
 ENV REDIS_HOST=""
 ENV WORKERS=1
+ENV PATH_PREFIX=""
 
 RUN mkdir -p /code/backend-crawler
 RUN mkdir -p /code/servicios_back_end
