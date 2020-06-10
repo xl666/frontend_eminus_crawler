@@ -18,7 +18,7 @@ server {
         proxy_redirect off;
     }
 
-    location /extractor/static/ {
+    location /${PATH_PREFIX}/static/ {
         alias /static/;
     }
 

@@ -68,12 +68,14 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./contenedor_front_end/config/nginx/conf.d:/etc/nginx/conf.d
+      - ./contenedor_front_end/config/nginx/templates:/etc/nginx/templates
       - ./contenedor_front_end/front_end/static:/static
     depends_on:
       - front_end
     ports:
       - 8000:80
+    environment:
+      PATH_PREFIX: extractor
 
   bd_back_end:
     image: mariadb
