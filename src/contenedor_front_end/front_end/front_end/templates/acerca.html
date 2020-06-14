@@ -29,6 +29,9 @@
 <h4>¿Es legal el sistema o puede ser bloqueado?</h4>
 <div class="text-justify">La legislación del país no es clara en cuanto a la legalidad de los bots, sin embargo, el sistema realiza las actividades que realizaría un usuario normal y nunca ejerce un efecto colateral en Eminus, esto es, nunca crea registros nuevos ni altera alguna información, simplemente lee la información que ya existe. En el desarrollo y operación del sistema se tiene especial cuidado de no sobrecargar a los servidores de Eminus, para que no se caiga en abusos que afecten a otros usuarios de Eminus y que además pudieran ser detectados como un uso malicioso. En gran parte por la razón anterior, notarás que muchas veces tus trabajos tardan en terminar o se encuentran en cola.</div>
 
+<h4>De los cursos que aparecen listados, ¿Cómo puedo saber cuál es su programa educativo correspondiente?</h4>
+<div class="text-justify">Desgraciadamente Eminus no proporciona esta información y el sistema no tiene forma de saberlo directamente, si requieres hacer extracciones de un programa educativo en especial, puedes usar como referencia el NRC que aparece en el nombre del curso y compararlo contra otra información, como la oferta académica</div>
+
 <h4>¿Qué tipo de información se extrae?</h4>
 <div class="text-justify">En la versión actual del sistema se extrae sólo información de prácticas y evaluaciones subidas por los estudiantes, la información es agrupada por actividad/evaluación y por estudiante a partir de su mátricula, o bien si es una actividad en equipo se agrupa por equipo. La información específicamente extraída es la siguiente:</div>
 
@@ -42,11 +45,19 @@
 <h4>¿Dónde se almacena la información extraída?</h4>
 <div class="text-justify">En la facultad de Estadística e Informática contamos con un servidor de recolección de evidencias, las evidencias están directamente almacenadas ahí para su recuperación durante el proceso de acreditación.</div>
 
+<h4>¿Qué significan los diferentes estatus que aparecen en la información de extracción?</h4>
+<ul>
+  <li> <span class="text-success">Terminado:</span> La extracción finalizó correctamente, se mantiene este mensaje durante unas horas. El panel de historial muestra todos los cursos que se han extraído correctamente.</li>
+  <li> <span class="text-danger">Error:</span> Algo salió mal al realizar la extracción, las razones pueden ser muy variadas, se aconseja volver a probar la extracción y si falla de nuevo reportar el error como se menciona más abajo. Las extracciones con estado de error permanecen un tiempo limitado y luego desaparecen.</li>
+  <li> <span class="text-warning">En cola:</span> El sistema limita el número de extracciones simultaneas que pueden realizarse, este estado indica que la extracción está esperando su turno. Existe un tiempo máximo de espera en cola, si tu extracción no aparece por ningún lado, es posible que haya agotado este tiempo de espera.</li>
+  <li><span class="text-primary">Ejecutando:</span> En estos momentos el sistema se encuentra realizando la extracción y no ha surgido ningún error. Existe un tiempo máximo de ejecución, tras el cual la extracción cambia a un estado de error.</li>
+</ul>
+
 <h4>¿Cómo sé que no se le dará un mal uso a mis credenciales?</h4>
 <div class="text-justify">Este software toma muy enserio aspectos de seguridad y privacidad de su información, para que usted tenga la confianza de que su información confidencial no será usada con fines diferentes a los de la herramienta o robada por terceros. Entre los elementos de seguridad principales destacan:</div>
 
 <ul>
-  <li>No se almacena su contraseña de miUV, salvo de forma temporal y cifrada para su uso durante la sesión de usuarios. El manejo seguro de credenciales fue el elemento principal de seguridad considerado. </li>
+  <li>No se almacena su contraseña de miUV en ningún punto del proceso, simplemente se pasan a Eminus. El manejo seguro de credenciales fue el elemento principal de seguridad considerado. </li>
 
   <li>Se utiliza una conexión protegida mediante HTTPS</li>
 
@@ -62,6 +73,6 @@
 
 <h3>Reporte de errores</h3>
 
-<div class="text-justify">Si usted detecta algún error general o en el procesamiento de alguna extracción, favor de reportarlo a hlimon@uv.mx, indicando, de aplicar, el usuario de miUV usado, el periodo y experiencia educativa asociada al problema.</div>
+<div class="text-justify">Si usted detecta algún error general o en el procesamiento de alguna extracción, favor de reportarlo a hlimon@uv.mx, indicando, de aplicar, el periodo y experiencia educativa asociada al problema.</div>
 
 {% endblock %}
