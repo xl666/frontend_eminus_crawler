@@ -51,8 +51,8 @@ def execute(cmd, path_bitacora):
     os.environ.putenv('LOG_PATH', path_bitacora)
     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     salida, err = popen.communicate()
-    if err:
-        raise subprocess.CalledProcessError(err, cmd)
+    if err.strip():
+        raise Exception(err.decode('utf-8'))
     return salida
 
 
@@ -78,18 +78,18 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
     finally:
         os.environ.putenv('usuario_eminus', '')
         os.environ.putenv('password_eminus', '')
-        with open(path_bitacora, 'ta') as archivo:
-            archivo.write('\nSalida:\n')
-            if type(salida) != type(''):
-                archivo.write(salida.decode('utf-8'))
-            else:
-                archivo.write(salida)
+    with open(path_bitacora, 'ta') as archivo:
+        archivo.write('\nSalida:\n')
+        if type(salida) != type(''):
+            archivo.write(salida.decode('utf-8'))
+        else:
+            archivo.write(salida)
             archivo.write('\n')
         # Almacenar trabajos terminados con exito
-        if not b'Error' in salida:
-            almacenar_trabajo_terminado(job.id, id_eminus, usuario, periodo, nombre)
+    if type(salida) == type(b'') and not b'Error' in salida:
+        almacenar_trabajo_terminado(job.id, id_eminus, usuario, periodo, nombre)
 
-    return salida
+    return 'True'
     
 
 def calendarizar_trabajo_extraccion(usuario, password, ids, periodos, nombres, path_salida, terminados=False):
