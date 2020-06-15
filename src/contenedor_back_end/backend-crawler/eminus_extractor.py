@@ -23,7 +23,10 @@ global_driver = None
 
 def handler(signal_received, frame):
     if global_driver:
-        global_driver.close()
+        try:
+            global_driver.close()
+        except:
+            pass #driver already closed
 
 
 def modo_uso():
