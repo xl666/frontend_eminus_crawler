@@ -20,6 +20,7 @@ from front_end.views import *
 from front_end import settings
 
 urlpatterns = [
+    path('%s' % settings.PATH_PREFIX, login, name='index'),
     path('%slogin/' % settings.PATH_PREFIX, login, name='login'),
     path('%slistar_cursos/' % settings.PATH_PREFIX, listar_cursos, name='listar_cursos'),
     path('%sinfo_extraccion/' % settings.PATH_PREFIX, info_extraccion, name='info_extraccion'),

@@ -6,6 +6,7 @@ import getopt
 import getpass
 from sys import exit
 import time
+import signal
 
 import login 
 import cursos as cr
@@ -16,6 +17,14 @@ import credenciales
 import multiprocessing
 import salidas
 import recolectorArchivos
+
+# secure if only one process per extraction
+global_driver = None
+
+def handler(signal_received, frame):
+    if global_driver:
+        global_driver.close()
+
 
 def modo_uso():
     print('eminus_extractor.py [OPCIONES]')
@@ -73,10 +82,15 @@ def listar_cursos(terminados=False):
         cr.ir_a_cursos_terminados(driver)
     cursos = cr.regresar_cursos(driver)
     print(cr.ver_cursos(cursos))
+    driver.close()
 
 
 def run_process(terminados, idCurso, directorio, usuario, password, color=salidas.colores[0]):
     driver = config.configure()
+    global global_driver
+    global_driver = driver
+    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGTERM, handler)
     salidas.color_default = color
     login.login(driver, usuario, password)
     if terminados:
