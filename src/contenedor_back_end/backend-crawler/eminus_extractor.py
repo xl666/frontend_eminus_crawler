@@ -3,15 +3,13 @@
 import os
 import sys
 import getopt
-import getpass
 from sys import exit
 import time
 import signal
 
-import login 
+import login
 import cursos as cr
 import config
-import excepciones
 import decoradores
 import credenciales
 import multiprocessing
@@ -20,6 +18,7 @@ import recolectorArchivos
 
 # secure if only one process per extraction
 global_driver = None
+
 
 def handler(signal_received, frame):
     if global_driver:
@@ -66,14 +65,13 @@ def validar_ids(cadena):
             return False
     return True
 
+
 def validar_combinaciones(opcionC,  opcionL, opcionE, opcionD):
     if opcionC and True in (opcionL, opcionE, opcionD):
         return False
     if opcionL and True in (opcionC, opcionE, opcionD):
         return False
-    
     return True
-
 
 
 @decoradores.manejar_errores_credenciales
@@ -124,17 +122,15 @@ def extraer_evidencias(terminados, evidencias, directorio, procesos=1):
                                     password,
                                     salidas.colores[i+1 % len(salidas.colores)])
                                    for i in range(len(evidencias))])
-    recolectorArchivos.COLA_MENSAJES.put(('exit','exit'))
+    recolectorArchivos.COLA_MENSAJES.put(('exit', 'exit'))
     despachador.join()
-    tiempo2 = time.time()
-    #print('Extracción finalizada en {:.2f} segundos'.format(tiempo2 - tiempo1))
-    
+
+
 if __name__ == '__main__':
 
     if len(sys.argv) < 2:
         modo_uso()
-        exit(0)
-        
+        exit(0)        
     try:
         options, remainder = getopt.getopt(sys.argv[1:], 'hcltd:e:p:', ['help', 'credenciales', 'listar', 'terminados', 'directorio=', 'evidencias=', 'procesos='])
     except:
@@ -194,9 +190,5 @@ if __name__ == '__main__':
         exit(0)
 
     if opcionE:
-        extraer_evidencias(terminados, evidencias, directorio, procesos)      
-        exit(0)
-
-    if opcionC:
-        crear_credenciales()
+        extraer_evidencias(terminados, evidencias, directorio, procesos)
         exit(0)
