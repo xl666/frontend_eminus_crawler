@@ -15,4 +15,5 @@ done
 su -c 'python3 -u manage.py makemigrations' limitado
 su -c 'python3 -u manage.py migrate' limitado
 su -c 'python3 crear_usuario.py' limitado
-su -c 'gunicorn --bind :8000 servicios_back_end.wsgi:application --reload' limitado
+su -c 'gunicorn --bind :8000 servicios_back_end.wsgi:application --reload &> log.txt' limitado
+#su -c 'python3 -u manage.py runserver 0.0.0.0:8000 &> log.txt' limitado

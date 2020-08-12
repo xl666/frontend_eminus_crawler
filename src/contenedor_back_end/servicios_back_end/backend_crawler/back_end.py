@@ -29,13 +29,13 @@ def regresar_cursos(usuario, password, terminados=False):
     os.environ.putenv('password_eminus', password.strip())
     comando = f'python "{settings.PATH_BACK_END}/eminus_extractor.py" -l'
     if terminados:
-        comando += ' -t'    
+        comando += ' -t'
     salida = subprocess.Popen(comando, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout, stderr = salida.communicate()
     os.environ.putenv('usuario_eminus', '')
     os.environ.putenv('password_eminus', '')
-    if stderr or not stdout:
-        return None
+    if stderr or not stdout.strip():
+        return json.loads('{}')
     return json.loads(stdout)
 
 def almacenar_trabajo_terminado(bitacora, id_eminus, usuario, periodo, nombre):

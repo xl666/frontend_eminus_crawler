@@ -25,7 +25,7 @@ def curso_list(request):
             terminados = True
         datos = back_end.regresar_cursos(usuario, password, terminados)
         if not datos:
-            return Response({'Error': 'No se pudieron recuperar los datos'})
+            return Response({})
         return Response(datos)
 
 

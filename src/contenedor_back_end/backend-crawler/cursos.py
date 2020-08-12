@@ -7,6 +7,8 @@ import salidas
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
+
 import time
 import datetime
 
@@ -59,10 +61,13 @@ def regresar_cursos(driver):
     cursos = driver.find_elements_by_class_name('contenedorCurso')
     resultado = {}
     for curso in cursos:
-        perfil = curso.find_element_by_class_name('tipoPerfil').get_attribute("textContent")
-        if perfil != 'Facilitador':
+        try:
+            perfil = curso.find_element_by_class_name('tipoPerfil').get_attribute("textContent")
+            if perfil != 'Facilitador':
+                continue
+            resultado[curso.get_attribute('id')] = curso
+        except NoSuchElementException:
             continue
-        resultado[curso.get_attribute('id')] = curso
     return resultado
 
 
@@ -103,6 +108,8 @@ def ver_cursos(cursos):
         else:
             fecha_cursos[fecha].append(nombre)
 
+    if not fecha_cursos:
+        return '[]'
     salida = '['
     for fe in ordenar_cursos_fecha(fecha_cursos):
         for curso in fecha_cursos[fe]:
