@@ -1,7 +1,7 @@
 FROM python:3.8
 
 RUN apt-get -y update \  
-    && apt-get install -y chromium \
+    && apt-get install -y chromium zip\
     && apt-get -y clean
 
 RUN mkdir /dependencias

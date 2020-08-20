@@ -11,6 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 import time
 import datetime
+import os
 
 URL_MAIN = 'https://eminus.uv.mx/eminus/PrincipalEminus.aspx'
 mes_mapping = {'Ene': 1, 'Feb': 2, 'Mar': 3, 'Abr': 4, 'May': 5,
@@ -171,6 +172,8 @@ def extraer_evidencias_curso(driver, cursos, pk, ruta, terminados=False):
     salida = almacenamiento.crear_ruta(ruta, 'evaluaciones')
     evaluaciones.extraer_respuestas_evaluaciones_curso(driver, salida)
     regresar_a_curso(driver, pk, terminados)
+    nombre_curso = ruta.split('/')[-1]
+    os.system(f'cd "{ruta}"; zip -r "{nombre_curso}.zip" "actividades" "evaluaciones"; rm -r actividades; rm -r evaluaciones')
 
 def extraer_evidencias_lista_cursos(driver, cursos, lista, ruta, terminados=False):
     for elemento in lista:
@@ -181,7 +184,7 @@ def extraer_evidencias_lista_cursos(driver, cursos, lista, ruta, terminados=Fals
         salida0 = almacenamiento.crear_ruta(ruta, fecha)
         salida = almacenamiento.crear_ruta(salida0, nombre)
         extraer_evidencias_curso(driver, cursos, elemento, salida, terminados)
-
+        
         driver.get(URL_MAIN)
         try:
             WebDriverWait(driver, 10).until(
