@@ -56,6 +56,13 @@ def execute(cmd, path_bitacora):
     return salida
 
 
+def trabajo_finalizo_bien(path_bitacora):
+    with open(path_bitacora) as archivo:
+        contenido = archivo.read()
+        if 'Fin de extracción' in contenido:
+            return True
+    return False
+
 def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminados=False, procesos=1):
     os.environ.putenv('usuario_eminus', usuario.strip())
     os.environ.putenv('password_eminus', password.strip())
@@ -86,7 +93,7 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
             archivo.write(salida)
             archivo.write('\n')
         # Almacenar trabajos terminados con exito
-    if type(salida) == type(b'') and not b'Error' in salida:
+    if type(salida) == type(b'') and trabajo_finalizo_bien(path_bitacora):
         almacenar_trabajo_terminado(job.id, id_eminus, usuario, periodo, nombre)
 
     return 'True'
