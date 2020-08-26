@@ -14,11 +14,13 @@ services:
       CLIENTE_SERVICIOS_USR: ${CLIENTE_SERVICIOS_USR}
       CLIENTE_SERVICIOS_PWD: ${CLIENTE_SERVICIOS_PWD}
       PATH_PREFIX: extractor
+      PATH_MEDIA_BACK_END: /recursos
     build: ./contenedor_front_end
     restart: always
     container_name: eminus_crawler_front_end
     volumes:
       - ./contenedor_front_end/front_end:/code
+      - ./contenedor_back_end/servicios_back_end/media:/recursos
     depends_on:
       - bd_front_end
     deploy:

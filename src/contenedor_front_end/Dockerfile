@@ -16,9 +16,11 @@ ENV URL_SERVICIOS=""
 ENV CLIENTE_SERVICIOS_USR=""
 ENV CLIENTE_SERVICIOS_PWD=""
 ENV PATH_PREFIX=""
+ENV PATH_MEDIA_BACK_END=""
 
 RUN mkdir /code
 RUN mkdir /start
+RUN mkdir /recursos
 
 COPY ./run.sh /start
 RUN chmod 751 /start/run.sh
