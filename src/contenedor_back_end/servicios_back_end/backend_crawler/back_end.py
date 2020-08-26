@@ -35,7 +35,7 @@ def regresar_cursos(usuario, password, terminados=False):
     os.environ.putenv('usuario_eminus', '')
     os.environ.putenv('password_eminus', '')
     if stderr or not stdout.strip():
-        return json.loads('{}')
+        return json.loads('{}')    
     return json.loads(stdout)
 
 def almacenar_trabajo_terminado(bitacora, id_eminus, usuario, periodo, nombre):

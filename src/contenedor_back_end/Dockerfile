@@ -32,7 +32,7 @@ RUN useradd -s /bin/bash limitado
 
 RUN chown -R limitado /code
 
-RUN wget https://chromedriver.storage.googleapis.com/80.0.3987.106/chromedriver_linux64.zip
+RUN wget  https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
 
