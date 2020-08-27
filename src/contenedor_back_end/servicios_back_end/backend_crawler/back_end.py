@@ -78,10 +78,12 @@ def extraer(usuario, password, id_eminus, periodo, nombre, path_salida, terminad
     try:
         salida = execute(comando, path_bitacora)
     except Exception as err:
+        # Es posible que se lance una excepcion aunque ya se haya terminado
         with open(path_bitacora, 'ta') as archivo:
             archivo.write('\nERROR:\n')
             archivo.write(err.__str__())
-        return err.__str__()
+        if not trabajo_finalizo_bien(path_bitacora): 
+            return err.__str__()
     finally:
         os.environ.putenv('usuario_eminus', '')
         os.environ.putenv('password_eminus', '')
