@@ -11,6 +11,7 @@ import almacenamiento
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
 import requests
 
@@ -60,7 +61,9 @@ def ver_entregas(driver, entregas, urlCurrent):
 def ir_a_entrega(driver, entrega, urlCurrent):
     assert driver.current_url == urlCurrent
     nombre = get_nombre_entrega(driver, entrega, urlCurrent)
-    entrega.find_element_by_class_name('reltop25').click()
+    elemento = entrega.find_element_by_class_name('reltop25')
+    ActionChains(driver).move_to_element(elemento).perform()
+    elemento.click()
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, 'lblNombreActividad'))) 
@@ -109,6 +112,7 @@ def regresar_alumnos_contestaron_entrega(driver, urlCurrent, grupo=False):
         
 def ir_a_respuesta_alumno(driver, alumno, urlCurrent):
     assert driver.current_url == urlCurrent
+    ActionChains(driver).move_to_element(alumno).perform()
     alumno.click()
     try:
         WebDriverWait(driver, 10).until(
