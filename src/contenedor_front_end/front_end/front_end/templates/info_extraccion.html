@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/extracciones.js' %}"></script>
 {% endblock %}
 
 {% block contenido %}
@@ -71,6 +72,7 @@
     <table class="table table-striped">
       <thead>
 	<tr>
+	  <th class="text-center">Descargar</th>
           <th class="text-center">Periodo</th>
           <th class="text-center">Nombre</th>
 	</tr>
@@ -78,6 +80,7 @@
       <tbody id="tabla_cursos">
 	{% for elemento in historial %}
 	<tr>
+	  <td class="text-center"><button class="btn-primary" onclick="descargar(&quot;{{ elemento.periodo }}&quot;, &quot;{{ elemento.nombre }}&quot;, &quot;{% url 'generar_enlace_descarga' %}&quot;);">Descargar</button></td>
 	  <td class="text-center">{{ elemento.periodo }}</td>
 	  <td class="text-center">{{ elemento.nombre }}</td>
 	</tr>

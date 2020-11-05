@@ -72,6 +72,7 @@ services:
     volumes:
       - ./contenedor_front_end/config/nginx/templates:/etc/nginx/templates
       - ./contenedor_front_end/front_end/static:/static
+      - ./contenedor_back_end/servicios_back_end/media:/recursos
     depends_on:
       - front_end
     ports:

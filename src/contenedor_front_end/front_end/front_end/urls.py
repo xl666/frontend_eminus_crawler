@@ -26,4 +26,5 @@ urlpatterns = [
     path('%sinfo_extraccion/' % settings.PATH_PREFIX, info_extraccion, name='info_extraccion'),
     path('%sacerca_de/' % settings.PATH_PREFIX, acerca_de, name='acerca_de'),
     path('%slogout/' % settings.PATH_PREFIX, logout, name='logout'),
+    path('%sdescargar/' % settings.PATH_PREFIX, generar_enlace_descarga, name='generar_enlace_descarga'),
 ]

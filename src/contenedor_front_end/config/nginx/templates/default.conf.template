@@ -4,11 +4,13 @@ upstream front_end_wsgi {
     server front_end:8000;
 }
 
+
 # now we declare our main server
 server {
-
+       
     listen 80;
     server_name localhost;
+    disable_symlinks off;	
 
     location / {
         # everything is passed to Gunicorn
@@ -25,4 +27,6 @@ server {
     location /media/ {
         alias /media/;
     }
+
+
 }

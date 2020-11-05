@@ -5,6 +5,7 @@ from bd import models
 import front_end.back_end as back_end
 from front_end.decoradores import *
 from front_end import excepciones
+from django.http import JsonResponse
 
 def login(request):
     t = 'login.html'
@@ -93,12 +94,13 @@ def info_extraccion(request):
             return redirect('logout')
         trabajos = back_end.regresar_trabajos_terminados(request, token)
         actuales = back_end.regresar_trabajos_actuales(request, token)
-        
         return render(request, t, {'historial': trabajos, 'pendientes': actuales})
+
 
 def acerca_de(request):
     return render(request, 'acerca.html', {'logueado': request.session.get('logueado', False)})
-    
+
+
 @esta_logueado
 def logout(request):
     request.session.flush()
@@ -108,3 +110,17 @@ def logout(request):
     respuesta.delete_cookie('key3')
     respuesta.delete_cookie('key4')
     return respuesta
+
+
+@esta_logueado
+def generar_enlace_descarga(request):
+    if request.method == 'GET':
+        try:
+            token = back_end.regresar_token_sesion()
+        except excepciones.TokenException as err:
+            request.session['logueado'] = False
+            return redirect('logout')
+        enlace = back_end.generar_descarga(request.GET.get("periodo", ""), request.GET.get("nombre", ""), request, token)
+        respuesta = {'enlace': enlace}
+        return JsonResponse(respuesta)
+    return JsonResponse({})

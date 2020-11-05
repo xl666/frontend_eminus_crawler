@@ -179,3 +179,51 @@ def regresar_trabajos_actuales(request, token):
     else:
         trabajos = json.loads(respuesta.text)        
         return trabajos
+
+
+def remplazarDiagonalesPorGuion(cadena):
+    res = ''
+    for c in cadena:
+        if c == '/':
+            res += '-'
+        else:
+            res += c
+    return res
+
+
+def generar_nombre_aleatorio(longitud=12):
+    nombre = base64.b64encode(os.urandom(longitud)).decode('utf-8')
+    return remplazarDiagonalesPorGuion(nombre)
+
+
+def crear_enlace_logico_aleatorio(path_dir_original, path_dir_enlace):
+    """
+    Crea enlace lógico path_dir_enlace/nombreRandom de path_dir_original
+    """
+    nombre_random = generar_nombre_aleatorio()
+    comando = f'ln -s "{path_dir_original}" "{path_dir_enlace}/{nombre_random}"'
+    os.system(comando)
+    return nombre_random
+
+
+def validar_extraccion(periodo, nombre_ee, request, token):
+    trabajos = regresar_trabajos_terminados(request, token)
+    for elemento in trabajos:
+        t = elemento.keys()
+        per = elemento['periodo']
+        nom = elemento['nombre']
+        if per == periodo and nom == nombre_ee:
+            return True
+    return False
+
+def generar_descarga(periodo, nombre_ee, request, token):
+    # continuar aca
+    # recuperar referencia de directorio media de settings
+    if not validar_extraccion(periodo, nombre_ee, request, token):
+        return ''
+    periodo = remplazarDiagonalesPorGuion(periodo)
+    path_dir_media = f'{settings.PATH_MEDIA_BACK_END}/{periodo}/{nombre_ee}'
+    path_dir_enlace = settings.STATICFILES_DIRS[0]
+    dir_random_nuevo = crear_enlace_logico_aleatorio(path_dir_media,
+                                                     path_dir_enlace)
+    return f'{settings.STATIC_URL}/{dir_random_nuevo}/{nombre_ee}.zip'
