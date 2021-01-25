@@ -1,5 +1,8 @@
 
 from bs4 import BeautifulSoup
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
+
 
 def agregarSaltos(texto, breakpoint=100):
     columna = 0
@@ -15,7 +18,7 @@ def agregarSaltos(texto, breakpoint=100):
             resultado += caracter
             columna += 1
     return resultado
-        
+
 
 def prettyfy(html):
     html = html.replace('\n', '')
@@ -24,4 +27,3 @@ def prettyfy(html):
     html = html.replace('<br>', '\n\n')
     soup = BeautifulSoup(html, 'html.parser')
     return agregarSaltos(soup.text)
-    
